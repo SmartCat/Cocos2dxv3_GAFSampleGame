@@ -6,7 +6,6 @@ USING_NS_CC;
 
 Player::Player()
 {
-
 }
 
 Player::~Player()
@@ -16,8 +15,8 @@ Player::~Player()
 
 void Player::setGun(cocos2d::Node* gun)
 {
+    int n = m_model->objectIdByObjectName("GUN");
 }
-
 
 bool Player::init()
 {
@@ -32,7 +31,7 @@ bool Player::init()
         m_model->retain();
         Size screen = Director::getInstance()->getVisibleSize();
         m_model->setPosition(250, 500);
-        m_model->gotoAndStop(0);
+        m_model->playSequence("walk_right", true);
     }
     return ret;
 }
@@ -44,24 +43,48 @@ void Player::shoot()
 
 void Player::walkLeft()
 {
+    if (m_right)
+    {
+        m_right = false;
+        m_model->playSequence("walk_left", true);
+    }
+    else
+    {
+        m_model->resumeAnimation();
+    }
     m_moving = true;
-    m_right = false;
-    m_model->setScale(-1, 1);
-    m_model->setPosition(750, 500);
-    m_model->resumeAnimation();
 }
 
 void Player::walkRight()
 {
+    if (!m_right)
+    {
+        m_right = true;
+        m_model->playSequence("walk_right", true);
+    }
+    else
+    {
+        m_model->resumeAnimation();
+    }
     m_moving = true;
-    m_right = false;
-    m_model->setScale(1, 1);
-    m_model->setPosition(250, 500);
-    m_model->resumeAnimation();
 }
 
 void Player::stop()
 {
+#if 0
+    if (!m_moving)
+        return;
+
+    if (m_right)
+    {
+        m_model->playSequence("stand_right", true);
+    }
+    else
+    {
+        m_model->playSequence("stand_left", true);
+    }
     m_moving = false;
+#else
     m_model->pauseAnimation();
+#endif
 }

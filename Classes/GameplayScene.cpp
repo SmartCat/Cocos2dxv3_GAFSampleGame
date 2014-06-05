@@ -51,7 +51,7 @@ bool GameplayScene::init()
     }
 
     m_player = Player::create();
-    //m_player->setScale(0.1);
+    m_player->setGun(0);
     addChild(m_player, 1);
 
     return true;
