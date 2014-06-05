@@ -12,6 +12,6 @@ public:
     void advanceToMenu(cocos2d::Ref* pSender);
 
     void fireButtonCallback(cocos2d::Ref* pSender);
-    void leftButtonCallback(cocos2d::Ref* pSender);
-    void rightButtonCallback(cocos2d::Ref* pSender);
+    void leftButtonCallback(cocos2d::Ref* pSender, bool pressed);
+    void rightButtonCallback(cocos2d::Ref* pSender, bool pressed);
 };
