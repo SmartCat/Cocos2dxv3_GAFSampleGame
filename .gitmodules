@@ -1,0 +1,4 @@
+[submodule "cocos2d/external/GafPlayer"]
+	path = cocos2d/external/GafPlayer
+	url = https://github.com/CatalystApps/Cocos2dxGAFPlayer
+	branch = release-cocos2dx-3
