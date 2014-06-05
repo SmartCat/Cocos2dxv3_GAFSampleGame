@@ -1,6 +1,7 @@
 #include "GameplayScene.h"
 #include "MainMenuScene.h"
 #include "CCDoubleTriggerMenuItemLabel.h"
+#include "Player.h"
 
 USING_NS_CC;
 
@@ -49,6 +50,10 @@ bool GameplayScene::init()
         addChild(menu, 1);
     }
 
+    m_player = Player::create();
+    //m_player->setScale(0.1);
+    addChild(m_player, 1);
+
     return true;
 }
 
@@ -60,21 +65,29 @@ void GameplayScene::advanceToMenu(cocos2d::Ref* pSender)
 
 void GameplayScene::fireButtonCallback(cocos2d::Ref* pSender)
 {
-    CCLOG("shoot");
+    m_player->shoot();
 }
 
 void GameplayScene::leftButtonCallback(cocos2d::Ref* pSender, bool pressed)
 {
     if (pressed)
-        CCLOG("right start");
+    {
+        m_player->walkLeft();
+    }
     else
-        CCLOG("right end");
+    {
+        m_player->stop();
+    }
 }
 
 void GameplayScene::rightButtonCallback(cocos2d::Ref* pSender, bool pressed)
 {
     if (pressed)
-        CCLOG("left start");
+    {
+        m_player->walkRight();
+    }
     else
-        CCLOG("left end");
+    {
+        m_player->stop();
+    }
 }
