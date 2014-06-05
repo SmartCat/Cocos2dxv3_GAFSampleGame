@@ -138,6 +138,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\CCDoubleTriggerMenuItemLabel.cpp" />
     <ClCompile Include="..\Classes\GameplayScene.cpp" />
+    <ClCompile Include="..\Classes\Gun.cpp" />
     <ClCompile Include="..\Classes\MainMenuScene.cpp" />
     <ClCompile Include="..\Classes\Player.cpp" />
     <ClCompile Include="main.cpp" />
@@ -146,6 +147,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\CCDoubleTriggerMenuItemLabel.h" />
     <ClInclude Include="..\Classes\GameplayScene.h" />
+    <ClInclude Include="..\Classes\Gun.h" />
     <ClInclude Include="..\Classes\MainMenuScene.h" />
     <ClInclude Include="..\Classes\Player.h" />
     <ClInclude Include="main.h" />

@@ -3,9 +3,19 @@
 #include "cocos2d.h"
 
 class GAFAnimatedObject;
+class Gun;
 
 class Player : public cocos2d::Node
 {
+    enum EState
+    {
+        ENone = -1,
+        EStandLeft,
+        EStandRight,
+        EWalkLeft,
+        EWalkRight
+    };
+
 public:
     Player();
     virtual ~Player();
@@ -13,7 +23,7 @@ public:
     
     CREATE_FUNC(Player);
 
-    void setGun(cocos2d::Node* gun);
+    void setGun(Gun* gun);
 
     void shoot();
     void walkLeft();
@@ -21,8 +31,7 @@ public:
     void stop();
 
 private:
-    bool m_moving = false;
-    bool m_right = true;
+    EState m_state = ENone;
+    Gun*   m_gun = nullptr;
     GAFAnimatedObject* m_model = nullptr;
-    GAFAnimatedObject* m_gun = nullptr;
 };
