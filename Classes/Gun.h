@@ -1,10 +1,12 @@
 #pragma once 
-
+#include "GAFPrecompiled.h"
+#include "GAFDelegates.h"
 #include "cocos2d.h"
+
 class GAFAnimatedObject;
 class GAFAsset;
 
-class Gun : public cocos2d::Node
+class Gun : public cocos2d::Node, public GAFSequenceDelegate
 {
 public:
     Gun();
@@ -17,6 +19,7 @@ public:
 
     void update(float dt);
 
+    virtual void onFinishSequence(GAFAnimatedObject * object, const std::string& sequenceName);
 private:
     float m_reloadTime = 0;
     float m_projectileSpeed = 1;

@@ -16,5 +16,7 @@
 	<real>1</real>
 	<key>reload_time</key>
 	<real>0.5</real>
+	<key>shoot_delay</key>
+	<real>0.1</real>
 </dict>
 </plist>

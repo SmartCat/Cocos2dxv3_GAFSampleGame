@@ -5,12 +5,16 @@
 
 USING_NS_CC;
 
+
+
+
 Gun::Gun()
 {
 }
 
 Gun::~Gun()
 {
+    m_model->setSequenceDelegate(nullptr);
     CC_SAFE_RELEASE(m_model);
     CC_SAFE_RELEASE(m_projectile);
 }
@@ -31,6 +35,14 @@ void Gun::update(float dt)
 {
     if (m_cooldown > 0)
         m_cooldown -= dt;
+}
+
+void Gun::onFinishSequence(GAFAnimatedObject * object, const std::string& sequenceName)
+{
+    if (sequenceName == "fire")
+    {
+        m_model->playSequence("idle");
+    }
 }
 
 Gun* Gun::create(const std::string& name)
@@ -65,6 +77,7 @@ bool Gun::init(const std::string& name)
         Vec2 position(Vec2(params->valueForKey("pivot_x")->floatValue(), params->valueForKey("pivot_y")->floatValue()));
         m_model->setPosition(position);
         m_model->playSequence("idle", true);
+        m_model->setSequenceDelegate(this);
         addChild(m_model);
 
         std::string projectileName = params->valueForKey("projectile")->_string;
