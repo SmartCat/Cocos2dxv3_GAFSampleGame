@@ -2,23 +2,27 @@
 
 #include "cocos2d.h"
 class GAFAnimatedObject;
+class GAFAsset;
 
 class Gun : public cocos2d::Node
 {
 public:
     Gun();
     virtual ~Gun();
-    virtual bool init();  
-    
-    void load(const std::string& name);
+    virtual bool init(const std::string& name);
 
-    CREATE_FUNC(Gun);
+    static Gun* create(const std::string& name);
 
     void shoot();
 
+    void update(float dt);
+
 private:
     float m_reloadTime = 0;
-    float m_bulletSpeed = 1;
-    float m_bulletDamage = 1;
+    float m_projectileSpeed = 1;
+    float m_projectileDamage = 1;
     GAFAnimatedObject* m_model = nullptr;
+    GAFAsset* m_projectile = nullptr;
+
+    float m_cooldown = 0;
 };

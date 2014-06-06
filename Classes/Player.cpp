@@ -13,18 +13,18 @@ Player::Player()
 Player::~Player()
 {
     CC_SAFE_RELEASE(m_model);
+    CC_SAFE_RELEASE(m_gun);
 }
 
 void Player::setGun(Gun* gun)
 {
-    CC_SAFE_FREE(m_gun);
-    m_gun = gun;
-    m_gun->retain();
 
     m_model->captureControlOverSubobjectNamed("ROBOT.GUN", kGAFAnimatedObjectControl_ApplyState);
     int n = m_model->objectIdByObjectName("ROBOT.GUN");
     auto obj = m_model->subObjectForInnerObjectId(n);
-
+    obj->removeChild(m_gun, true);
+    m_gun = gun;
+    m_gun->retain();
 
     obj->setVisible(false);
     obj->addChild(m_gun, 1);

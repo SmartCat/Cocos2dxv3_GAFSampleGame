@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
+<plist version="1.0">
+<dict>
+	<key>model</key>
+	<string>gun_2/gun_2.gaf</string>
+	<key>pivot_x</key>
+	<real>-300</real>
+	<key>pivot_y</key>
+	<real>335</real>
+	<key>projectile</key>
+	<string>bullet/bullet.gaf</string>
+	<key>projectile_speed</key>
+	<real>5</real>
+	<key>damage</key>
+	<real>1</real>
+	<key>reload_time</key>
+	<real>1</real>
+</dict>
+</plist>

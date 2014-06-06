@@ -47,16 +47,30 @@ bool GameplayScene::init()
     {
         Label* fire = Label::create("><", "Courier.ttf", 70);
         MenuItem* fireButton = MenuItemLabel::create(fire, CC_CALLBACK_1(GameplayScene::fireButtonCallback, this));
-        fireButton->setPosition(Size(visibleSize.width - fireButton->getContentSize().width, fireButton->getContentSize().height + 10));
+        fireButton->setPosition(Size(visibleSize.width - fireButton->getContentSize().width, fireButton->getContentSize().height - 10));
         Menu* menu = Menu::create(fireButton, NULL);
         menu->setPosition(Vec2::ZERO);
         addChild(menu, 1);
     }
 
+    {
+        Label* one = Label::create("Gun 1", "Courier.ttf", 35);
+        Label* two = Label::create("Gun 2", "Courier.ttf", 35);
+        MenuItem* oneButton = MenuItemLabel::create(one,
+            CC_CALLBACK_1(GameplayScene::setGunCallback, this, "gun_1.plist"));
+
+        MenuItem* twoButton = MenuItemLabel::create(two,
+            CC_CALLBACK_1(GameplayScene::setGunCallback, this, "gun_2.plist"));
+
+        twoButton->setPosition(Size(0, - oneButton->getContentSize().height + 10));
+        Menu* menu = Menu::create(oneButton, twoButton, NULL);
+        menu->setPosition(Size(oneButton->getContentSize().width, visibleSize.height - oneButton->getContentSize().height));
+        addChild(menu, 1);
+    }
+
     m_player = Player::create();
 
-    Gun* gun = Gun::create();
-    gun->load("gun_1/gun_1.gaf");
+    Gun* gun = Gun::create("gun_1.plist");
     m_player->setGun(gun);
     addChild(m_player, 1);
 
@@ -96,4 +110,9 @@ void GameplayScene::rightButtonCallback(cocos2d::Ref* pSender, bool pressed)
     {
         m_player->stop();
     }
+}
+
+void GameplayScene::setGunCallback(cocos2d::Ref* pSender, const std::string& name)
+{
+    m_player->setGun(Gun::create(name));
 }
