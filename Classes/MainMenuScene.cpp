@@ -13,7 +13,7 @@ bool MainMenuScene::init()
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
 
-    Label* text = Label::createWithSystemFont("Start Game", "Arial", 25);
+    Label* text = Label::create("Start Game", "Courier.ttf", 35);
     MenuItem* startButton = MenuItemLabel::create(text, CC_CALLBACK_1(MainMenuScene::advanceToGame, this));
     startButton->setPosition(visibleSize / 2);
     Menu* menu = Menu::create(startButton, NULL);
