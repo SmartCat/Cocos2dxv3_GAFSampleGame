@@ -2,6 +2,9 @@
 #include "MainMenuScene.h"
 #include "CCDoubleTriggerMenuItemLabel.h"
 #include "Player.h"
+#include "GAFPrecompiled.h"
+#include "GAFAnimatedObject.h"
+#include "Gun.h"
 
 USING_NS_CC;
 
@@ -51,7 +54,10 @@ bool GameplayScene::init()
     }
 
     m_player = Player::create();
-    m_player->setGun(0);
+
+    Gun* gun = Gun::create();
+    gun->load("gun_1/gun_1.gaf");
+    m_player->setGun(gun);
     addChild(m_player, 1);
 
     return true;

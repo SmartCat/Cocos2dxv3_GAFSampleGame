@@ -17,7 +17,18 @@ Player::~Player()
 
 void Player::setGun(Gun* gun)
 {
-    int n = m_model->objectIdByObjectName("GUN");
+    CC_SAFE_FREE(m_gun);
+    m_gun = gun;
+    m_gun->retain();
+
+    m_model->captureControlOverSubobjectNamed("ROBOT.GUN", kGAFAnimatedObjectControl_ApplyState);
+    int n = m_model->objectIdByObjectName("ROBOT.GUN");
+    auto obj = m_model->subObjectForInnerObjectId(n);
+
+
+    obj->setVisible(false);
+    obj->addChild(m_gun, 1);
+
 }
 
 bool Player::init()
