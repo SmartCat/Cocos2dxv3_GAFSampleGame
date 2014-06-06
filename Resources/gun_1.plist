@@ -5,13 +5,17 @@
 	<key>model</key>
 	<string>gun_1/gun_1.gaf</string>
 	<key>pivot_x</key>
-	<real>-265</real>
+	<real>-160</real>
 	<key>pivot_y</key>
-	<real>350</real>
+	<real>200</real>
 	<key>projectile</key>
 	<string>bullet/bullet.gaf</string>
+	<key>projectile_pivot_x</key>
+	<real>-160</real>
+	<key>projectile_pivot_y</key>
+	<real>200</real>
 	<key>projectile_speed</key>
-	<real>5</real>
+	<real>5000</real>
 	<key>damage</key>
 	<real>1</real>
 	<key>reload_time</key>

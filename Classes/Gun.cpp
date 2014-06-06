@@ -2,11 +2,10 @@
 #include "GAFPrecompiled.h"
 #include "GAFAnimatedObject.h"
 #include "GAFAsset.h"
+#include "Projectile.h"
+
 
 USING_NS_CC;
-
-
-
 
 Gun::Gun()
 {
@@ -29,6 +28,22 @@ void Gun::shoot()
         m_model->playSequence("fire", false);
         m_cooldown = m_reloadTime;
     }
+
+    Node* model = m_projectile->createObjectAndRun(true);
+    Vec2 pos = getPosition();
+    Vec3 pos3(pos.x, pos.y, 0);
+    Mat4 transform = getNodeToWorldTransform();
+    transform.transformPoint(&pos3);
+    cocos2d::Quaternion quat;
+    transform.getRotation(&quat);
+    quat.normalize();
+    float rotation = 2.0f * acos(quat.w);
+    Vec2 direction = Vec2::forAngle(rotation);
+    Projectile* p = Projectile::create(model, m_projectileDamage, direction * m_projectileSpeed, m_shootDelay);
+    p->setNodeToParentTransform(getNodeToWorldTransform());
+    Director::getInstance()->getRunningScene()->addChild(p);
+    p->setPosition(Vec2(pos3.x, pos3.y) + m_projectileOffset);
+
 }
 
 void Gun::update(float dt)
@@ -85,9 +100,12 @@ bool Gun::init(const std::string& name)
         if (m_projectile)
             m_projectile->retain();
 
+        m_shootDelay = params->valueForKey("shoot_delay")->floatValue();
         m_projectileSpeed = params->valueForKey("projectile_speed")->floatValue();
         m_projectileDamage = params->valueForKey("damage")->floatValue();
         m_reloadTime = params->valueForKey("reload_time")->floatValue();
+
+        m_projectileOffset = Vec2(params->valueForKey("projectile_pivot_x")->floatValue(), params->valueForKey("projectile_pivot_y")->floatValue());
 
         Director::getInstance()->getScheduler()->scheduleUpdate(this, 1, false);
     }

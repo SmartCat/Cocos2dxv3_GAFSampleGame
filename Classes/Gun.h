@@ -12,18 +12,17 @@ public:
     Gun();
     virtual ~Gun();
     virtual bool init(const std::string& name);
-
     static Gun* create(const std::string& name);
 
     void shoot();
-
     void update(float dt);
-
     virtual void onFinishSequence(GAFAnimatedObject * object, const std::string& sequenceName);
 private:
     float m_reloadTime = 0;
     float m_projectileSpeed = 1;
+    float m_shootDelay = 1;
     float m_projectileDamage = 1;
+    cocos2d::Vec2 m_projectileOffset = cocos2d::Vec2::ZERO;
     GAFAnimatedObject* m_model = nullptr;
     GAFAsset* m_projectile = nullptr;
 
