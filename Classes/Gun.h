@@ -24,6 +24,7 @@ private:
     float m_shootDelay = 1;
     float m_projectileDamage = 1;
     cocos2d::Vec2 m_projectileOffset = cocos2d::Vec2::ZERO;
+    cocos2d::Vec2 m_emissionPoint = cocos2d::Vec2::ZERO;
     GAFAnimatedObject* m_model = nullptr;
     GAFAsset* m_projectile = nullptr;
 

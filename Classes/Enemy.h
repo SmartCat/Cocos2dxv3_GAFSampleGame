@@ -3,9 +3,8 @@
 #include "cocos2d.h"
 
 class GAFAnimatedObject;
-class Gun;
 
-class Player : public cocos2d::Node
+class Enemy : public cocos2d::Node
 {
     enum EState
     {
@@ -17,23 +16,23 @@ class Player : public cocos2d::Node
     };
 
 public:
-    Player();
-    virtual ~Player();
+    Enemy();
+    virtual ~Enemy();
     virtual bool init();  
     
-    CREATE_FUNC(Player);
-
-    void setGun(Gun* gun);
+    CREATE_FUNC(Enemy);
 
     void update(float dt);
-    void shoot();
+    void damage(float);
+
     void walkLeft();
     void walkRight();
     void stop();
 
+    void die();
 private:
     EState m_state = ENone;
-    Gun*   m_gun = nullptr;
     GAFAnimatedObject* m_model = nullptr;
     float m_speed = 200;
+    float m_health = 1;
 };

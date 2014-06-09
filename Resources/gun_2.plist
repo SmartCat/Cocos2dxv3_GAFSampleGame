@@ -10,12 +10,16 @@
 	<real>180</real>
 	<key>projectile</key>
 	<string>laser/laser.gaf</string>
+	<key>emission_point_x</key>
+	<real>220</real>
+	<key>emission_point_y</key>
+	<real>-85</real>
 	<key>projectile_pivot_x</key>
-	<real>-160</real>
+	<real>-370</real>
 	<key>projectile_pivot_y</key>
-	<real>215</real>
+	<real>300</real>
 	<key>projectile_speed</key>
-	<real>1000</real>
+	<real>5000</real>
 	<key>damage</key>
 	<real>1</real>
 	<key>reload_time</key>

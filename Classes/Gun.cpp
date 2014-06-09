@@ -31,7 +31,6 @@ void Gun::shoot()
     {
         m_model->playSequence("fire", false);
     }
-
 }
 
 void Gun::update(float dt)
@@ -50,23 +49,18 @@ void Gun::update(float dt)
 
 void Gun::emitProjectile()
 {
-    Node* model = m_projectile->createObjectAndRun(true);
+    GAFAnimatedObject* model = m_projectile->createObjectAndRun(true);
+    model->setPosition(m_projectileOffset);
 
     Mat4 transform = getNodeToWorldTransform();
 
-    cocos2d::Quaternion quat;
-    transform.getRotation(&quat);
-    quat.normalize();
-    float rotation = 2.0f * acos(quat.w);
-    Vec2 direction = Vec2::forAngle(rotation);
-
-    Projectile* p = Projectile::create(model, m_projectileDamage, Vec2(1, 0) * m_projectileSpeed);
-    p->setPosition(m_projectileOffset);
     Node* container = Node::create();
-    container->addChild(p);
-    container->setNodeToParentTransform(transform);
-    Director::getInstance()->getRunningScene()->addChild(container);
+    container->setPosition(m_emissionPoint);
+    addChild(container);
+    Projectile* p = Projectile::create(model, m_projectileDamage, m_projectileSpeed, container);
+    removeChild(container);
 
+    Director::getInstance()->getRunningScene()->addChild(p);
 }
 
 void Gun::onFinishSequence(GAFAnimatedObject * object, const std::string& sequenceName)
@@ -123,6 +117,7 @@ bool Gun::init(const std::string& name)
         m_reloadTime = params->valueForKey("reload_time")->floatValue();
 
         m_projectileOffset = Vec2(params->valueForKey("projectile_pivot_x")->floatValue(), params->valueForKey("projectile_pivot_y")->floatValue());
+        m_emissionPoint = Vec2(params->valueForKey("emission_point_x")->floatValue(), params->valueForKey("emission_point_y")->floatValue());
 
         Director::getInstance()->getScheduler()->scheduleUpdate(this, 1, false);
     }

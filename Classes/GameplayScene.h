@@ -9,7 +9,8 @@ class GameplayScene : public cocos2d::Scene
 public:
     virtual bool init();  
     
-    CREATE_FUNC(GameplayScene);
+    // Creates with physics
+    static GameplayScene* create();
 
     void advanceToMenu(cocos2d::Ref* pSender);
 
@@ -18,6 +19,8 @@ public:
     void rightButtonCallback(cocos2d::Ref* pSender, bool pressed);
     void setGunCallback(cocos2d::Ref* pSender, const std::string& name);
 
+    void spawnEnemy();
+    void onEnemyKilled(void* data);
 private:
     Player* m_player;
 };

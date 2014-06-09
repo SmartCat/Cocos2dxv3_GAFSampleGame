@@ -5,16 +5,35 @@
 #include "GAFPrecompiled.h"
 #include "GAFAnimatedObject.h"
 #include "Gun.h"
+#include "Enemy.h"
 
 USING_NS_CC;
 
+GameplayScene* GameplayScene::create()
+{
+    GameplayScene *pRet = new GameplayScene();
+    if (pRet && pRet->init())
+    {
+        pRet->autorelease();
+        return pRet;
+    }
+    else
+    {
+        delete pRet;
+        pRet = NULL;
+        return NULL;
+    }
+}
+
 bool GameplayScene::init()
 {
-    if (!Scene::init())
+    if (!Scene::initWithPhysics())
     {
         return false;
     }
     
+    _eventDispatcher->addCustomEventListener("enemy_killed", CC_CALLBACK_1(GameplayScene::onEnemyKilled, this));
+
     Size visibleSize = Director::getInstance()->getVisibleSize();
     
     {
@@ -68,12 +87,28 @@ bool GameplayScene::init()
         addChild(menu, 1);
     }
 
-    m_player = Player::create();
+    Node* level = Node::create();
+    addChild(level, 1, 1);
+    {
+        m_player = Player::create();
 
-    Gun* gun = Gun::create("gun_1.plist");
-    m_player->setGun(gun);
-    addChild(m_player, 1);
+        //Enemy* e = Enemy::create();
+        //level->addChild(e);
+        spawnEnemy();
 
+        getPhysicsWorld()->setGravity(Vec2(0.0f, 0.0f));
+
+        //getPhysicsWorld()->setDebugDrawMask(0xFF);
+
+
+        auto body = PhysicsBody::createEdgeBox(Size(100, 100), PHYSICSBODY_MATERIAL_DEFAULT, 3);
+        body->setPositionOffset(Vec2(50, 50));
+        body->setContactTestBitmask(0x3);
+
+        Gun* gun = Gun::create("gun_1.plist");
+        m_player->setGun(gun);
+        level->addChild(m_player, 1, 2);
+    }
     return true;
 }
 
@@ -115,4 +150,32 @@ void GameplayScene::rightButtonCallback(cocos2d::Ref* pSender, bool pressed)
 void GameplayScene::setGunCallback(cocos2d::Ref* pSender, const std::string& name)
 {
     m_player->setGun(Gun::create(name));
+}
+
+void GameplayScene::onEnemyKilled(void*)
+{
+    spawnEnemy();
+}
+
+void GameplayScene::spawnEnemy()
+{
+    Node* level = getChildByTag(1);
+
+    if (level == nullptr)
+        return;
+
+    Enemy* e = Enemy::create();
+    bool left = rand() % 2;
+    if (left)
+    {
+        e->setPosition(m_player->getPositionX() + 900, 0);
+        e->walkLeft();
+        level->addChild(e);
+    }
+    else
+    {
+        e->setPosition(m_player->getPositionX() - 900, 0);
+        e->walkRight();
+        level->addChild(e);
+    }
 }

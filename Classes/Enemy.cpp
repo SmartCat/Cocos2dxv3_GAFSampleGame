@@ -1,43 +1,25 @@
-#include "Player.h"
+#include "Enemy.h"
 #include "GAFPrecompiled.h"
 #include "GAFAnimatedObject.h"
 #include "GAFSprite.h"
-#include "Gun.h"
 
 USING_NS_CC;
 
-Player::Player()
+Enemy::Enemy()
 {
 }
 
-Player::~Player()
+Enemy::~Enemy()
 {
     CC_SAFE_RELEASE(m_model);
-    CC_SAFE_RELEASE(m_gun);
 }
 
-void Player::setGun(Gun* gun)
-{
-
-    m_model->captureControlOverSubobjectNamed("ROBOT.GUN", kGAFAnimatedObjectControl_ApplyState);
-    int n = m_model->objectIdByObjectName("ROBOT.GUN");
-    auto obj = m_model->subObjectForInnerObjectId(n);
-    obj->removeChild(m_gun, true);
-    m_gun = gun;
-    m_gun->retain();
-
-    obj->setVisible(false);
-    obj->addChild(m_gun, 1);
-
-}
-
-bool Player::init()
+bool Enemy::init()
 {
     bool ret = true;
     {
         Director::getInstance()->getScheduler()->scheduleUpdateForTarget(this, 1, false);
-
-        m_model = GAFAnimatedObject::createAndRun("roboprogrm/roboprogrm.gaf", true);
+        m_model = GAFAnimatedObject::createAndRun("robot_enemy/robot_enemy.gaf", true);
         CCASSERT(m_model, "Error. Not found player model.");
         if (m_model == nullptr)
             return false;
@@ -48,12 +30,12 @@ bool Player::init()
         Size screen = Director::getInstance()->getVisibleSize();
         m_model->setPosition(100, 500);
         m_model->setScale(1);
-        stop();        
+        walkLeft();
     }
     return ret;
 }
 
-void Player::update(float dt)
+void Enemy::update(float dt)
 {
     do
     {
@@ -70,12 +52,7 @@ void Player::update(float dt)
         {
             break;
         }
-        Node* level = Director::getInstance()->getRunningScene()->getChildByTag(1);
-        if (level)
-        {
-            setPosition(newPos);
-            level->setPosition(-newPos.x, newPos.y);
-        }
+        setPosition(newPos);
     } while (0);
 
 
@@ -83,19 +60,28 @@ void Player::update(float dt)
     auto body = PhysicsBody::createBox(rect.size, PHYSICSBODY_MATERIAL_DEFAULT);
     body->setPositionOffset(rect.origin + rect.size / 2);
     setPhysicsBody(body);
-    body->setCategoryBitmask(0x2);
-
+    body->setContactTestBitmask(0x3);
 }
 
-void Player::shoot()
+void Enemy::damage(float value)
 {
-    if (m_gun)
+    m_health -= value;
+    if (m_health <= 0)
     {
-        m_gun->shoot();
+        die();
     }
 }
 
-void Player::walkLeft()
+void Enemy::die()
+{
+    _eventDispatcher->dispatchCustomEvent("enemy_killed");
+    setPhysicsBody(nullptr);
+    Director::getInstance()->getScheduler()->unscheduleAllForTarget(this);
+    removeAllChildrenWithCleanup(true);
+    removeFromParentAndCleanup(true);
+}
+
+void Enemy::walkLeft()
 {
     if (m_state == EWalkLeft)
         return;
@@ -104,7 +90,7 @@ void Player::walkLeft()
     m_state = EWalkLeft;
 }
 
-void Player::walkRight()
+void Enemy::walkRight()
 {
     if (m_state == EWalkRight)
         return;
@@ -113,7 +99,7 @@ void Player::walkRight()
     m_state = EWalkRight;
 }
 
-void Player::stop()
+void Enemy::stop()
 {
     if (m_state == EStandLeft || m_state == EStandRight)
         return;
