@@ -22,6 +22,8 @@
 		1A95AE6419423DFC00AE1F30 /* gun_2 in Resources */ = {isa = PBXBuildFile; fileRef = 1A95AE5C19423DFC00AE1F30 /* gun_2 */; };
 		1A95AE6519423DFC00AE1F30 /* gun_2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1A95AE5D19423DFC00AE1F30 /* gun_2.plist */; };
 		1A95AE6619423DFC00AE1F30 /* laser in Resources */ = {isa = PBXBuildFile; fileRef = 1A95AE5E19423DFC00AE1F30 /* laser */; };
+		1A95AE6919460BA500AE1F30 /* robot_enemy in Resources */ = {isa = PBXBuildFile; fileRef = 1A95AE6819460BA500AE1F30 /* robot_enemy */; };
+		1A95AE6C19460BB000AE1F30 /* Enemy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1A95AE6A19460BB000AE1F30 /* Enemy.cpp */; };
 		1AC6FB1F180E996B004C840B /* libbox2d Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FAFF180E9839004C840B /* libbox2d Mac.a */; };
 		1AC6FB20180E996B004C840B /* libchipmunk Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FAFD180E9839004C840B /* libchipmunk Mac.a */; };
 		1AC6FB21180E996B004C840B /* libcocos2dx Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FAF9180E9839004C840B /* libcocos2dx Mac.a */; };
@@ -257,6 +259,9 @@
 		1A95AE5C19423DFC00AE1F30 /* gun_2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = gun_2; sourceTree = "<group>"; };
 		1A95AE5D19423DFC00AE1F30 /* gun_2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = gun_2.plist; sourceTree = "<group>"; };
 		1A95AE5E19423DFC00AE1F30 /* laser */ = {isa = PBXFileReference; lastKnownFileType = folder; path = laser; sourceTree = "<group>"; };
+		1A95AE6819460BA500AE1F30 /* robot_enemy */ = {isa = PBXFileReference; lastKnownFileType = folder; path = robot_enemy; sourceTree = "<group>"; };
+		1A95AE6A19460BB000AE1F30 /* Enemy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Enemy.cpp; path = ../Classes/Enemy.cpp; sourceTree = "<group>"; };
+		1A95AE6B19460BB000AE1F30 /* Enemy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Enemy.h; path = ../Classes/Enemy.h; sourceTree = "<group>"; };
 		1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = ../cocos2d/build/cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
 		1ACB3243164770DE00914215 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../cocos2dx/platform/third_party/ios/libraries/libcurl.a; sourceTree = "<group>"; };
 		1AFAF8B316D35DE700DB1158 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppDelegate.cpp; path = ../Classes/AppDelegate.cpp; sourceTree = "<group>"; };
@@ -374,6 +379,8 @@
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				1A95AE6A19460BB000AE1F30 /* Enemy.cpp */,
+				1A95AE6B19460BB000AE1F30 /* Enemy.h */,
 				1A95AE5519423DED00AE1F30 /* Projectile.cpp */,
 				1A95AE5619423DED00AE1F30 /* Projectile.h */,
 				1A95AE3D1941F6FE00AE1F30 /* CCDoubleTriggerMenuItemLabel.cpp */,
@@ -512,6 +519,7 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1A95AE6819460BA500AE1F30 /* robot_enemy */,
 				1A95AE5819423DFB00AE1F30 /* bullet */,
 				1A95AE5919423DFC00AE1F30 /* Courier.ttf */,
 				1A95AE5B19423DFC00AE1F30 /* gun_1.plist */,
@@ -725,6 +733,7 @@
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
 				1A95AE6419423DFC00AE1F30 /* gun_2 in Resources */,
 				50EF629717ECD46A001EB2F8 /* Icon-58.png in Resources */,
+				1A95AE6919460BA500AE1F30 /* robot_enemy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -752,6 +761,7 @@
 				1AFAF8B716D35DE700DB1158 /* AppDelegate.cpp in Sources */,
 				1A95AE471941F6FE00AE1F30 /* CCDoubleTriggerMenuItemLabel.cpp in Sources */,
 				1A95AE481941F6FE00AE1F30 /* GameplayScene.cpp in Sources */,
+				1A95AE6C19460BB000AE1F30 /* Enemy.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
