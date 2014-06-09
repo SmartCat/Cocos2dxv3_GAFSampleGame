@@ -13,9 +13,9 @@
 	<key>projectile_pivot_x</key>
 	<real>-160</real>
 	<key>projectile_pivot_y</key>
-	<real>200</real>
+	<real>215</real>
 	<key>projectile_speed</key>
-	<real>5000</real>
+	<real>1000</real>
 	<key>damage</key>
 	<real>1</real>
 	<key>reload_time</key>

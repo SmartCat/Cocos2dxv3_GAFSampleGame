@@ -10,13 +10,11 @@ Projectile::~Projectile()
 
 }
 
-bool Projectile::init(cocos2d::Node* model, float damage, const Vec2& velocity, float delay)
+bool Projectile::init(cocos2d::Node* model, float damage, const Vec2& velocity)
 {
     retain();
-    model->setRotation(velocity.getAngle());
     addChild(model);
     m_damage = damage;
-    m_delay = delay;
     m_velocity = velocity;
     
     cocos2d::Director::getInstance()->getScheduler()->scheduleUpdate(this, 1, false);
@@ -24,10 +22,10 @@ bool Projectile::init(cocos2d::Node* model, float damage, const Vec2& velocity, 
     return true;
 }
 
-Projectile* Projectile::create(cocos2d::Node* model, float damage, const Vec2& velocity, float delay)
+Projectile* Projectile::create(cocos2d::Node* model, float damage, const Vec2& velocity)
 {
     Projectile* ret = new Projectile();
-    if (ret && ret->init(model, damage, velocity, delay))
+    if (ret && ret->init(model, damage, velocity))
     {
         ret->autorelease();
         return ret;
@@ -45,12 +43,6 @@ void Projectile::destroy()
 
 void Projectile::update(float dt)
 {
-    if (m_delay > 0)
-    {
-        m_delay -= dt;
-        return;
-    }
-
     Vec2 pos = getPosition();
     pos += m_velocity * dt;
     setPosition(pos);

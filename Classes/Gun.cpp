@@ -23,26 +23,14 @@ void Gun::shoot()
     if (m_cooldown > 0)
         return;
 
+    m_shooting = true;
+    m_loadingTime = m_shootDelay;
+    m_cooldown = m_reloadTime;
+
     if (m_model)
     {
         m_model->playSequence("fire", false);
-        m_cooldown = m_reloadTime;
     }
-
-    Node* model = m_projectile->createObjectAndRun(true);
-    Vec2 pos = getPosition();
-    Vec3 pos3(pos.x, pos.y, 0);
-    Mat4 transform = getNodeToWorldTransform();
-    transform.transformPoint(&pos3);
-    cocos2d::Quaternion quat;
-    transform.getRotation(&quat);
-    quat.normalize();
-    float rotation = 2.0f * acos(quat.w);
-    Vec2 direction = Vec2::forAngle(rotation);
-    Projectile* p = Projectile::create(model, m_projectileDamage, direction * m_projectileSpeed, m_shootDelay);
-    p->setNodeToParentTransform(getNodeToWorldTransform());
-    Director::getInstance()->getRunningScene()->addChild(p);
-    p->setPosition(Vec2(pos3.x, pos3.y) + m_projectileOffset);
 
 }
 
@@ -50,6 +38,35 @@ void Gun::update(float dt)
 {
     if (m_cooldown > 0)
         m_cooldown -= dt;
+    if (m_loadingTime > 0)
+        m_loadingTime -= dt;
+
+    if (m_loadingTime <= 0 && m_shooting)
+    {
+        emitProjectile();
+        m_shooting = false;
+    }
+}
+
+void Gun::emitProjectile()
+{
+    Node* model = m_projectile->createObjectAndRun(true);
+
+    Mat4 transform = getNodeToWorldTransform();
+
+    cocos2d::Quaternion quat;
+    transform.getRotation(&quat);
+    quat.normalize();
+    float rotation = 2.0f * acos(quat.w);
+    Vec2 direction = Vec2::forAngle(rotation);
+
+    Projectile* p = Projectile::create(model, m_projectileDamage, Vec2(1, 0) * m_projectileSpeed);
+    p->setPosition(m_projectileOffset);
+    Node* container = Node::create();
+    container->addChild(p);
+    container->setNodeToParentTransform(transform);
+    Director::getInstance()->getRunningScene()->addChild(container);
+
 }
 
 void Gun::onFinishSequence(GAFAnimatedObject * object, const std::string& sequenceName)

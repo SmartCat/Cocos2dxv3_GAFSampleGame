@@ -39,12 +39,13 @@ bool Player::init()
         CCASSERT(m_model, "Error. Not found player model.");
         if (m_model == nullptr)
             return false;
+
         m_model->pause();
         addChild(m_model);
         m_model->retain();
         Size screen = Director::getInstance()->getVisibleSize();
         m_model->setPosition(100, 500);
-        m_model->setScale(1);
+        m_model->setScale(0.5);
         stop();
     }
     return ret;

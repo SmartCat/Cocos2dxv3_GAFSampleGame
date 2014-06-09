@@ -18,6 +18,7 @@ public:
     void update(float dt);
     virtual void onFinishSequence(GAFAnimatedObject * object, const std::string& sequenceName);
 private:
+    void emitProjectile();
     float m_reloadTime = 0;
     float m_projectileSpeed = 1;
     float m_shootDelay = 1;
@@ -27,4 +28,6 @@ private:
     GAFAsset* m_projectile = nullptr;
 
     float m_cooldown = 0;
+    float m_loadingTime = 0;
+    bool m_shooting = false;
 };
