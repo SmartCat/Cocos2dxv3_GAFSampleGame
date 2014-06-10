@@ -58,6 +58,7 @@ void Enemy::update(float dt)
     if (m_readyForCleanup)
     {
         onDieAnimationFinished();
+        return;
     }
 
     if (m_health <= 0)
