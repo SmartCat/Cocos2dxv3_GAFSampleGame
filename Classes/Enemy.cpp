@@ -15,13 +15,24 @@ Enemy::~Enemy()
     CC_SAFE_RELEASE(m_model);
 }
 
-bool Enemy::init()
+Enemy* Enemy::create(GAFAnimatedObject* model)
+{
+    Enemy* ret = new Enemy();
+    if (ret && ret->init(model))
+    {
+        return ret;
+    }
+    delete ret;
+    return nullptr;
+}
+
+bool Enemy::init(GAFAnimatedObject* model)
 {
     bool ret = true;
     {
 
         Director::getInstance()->getScheduler()->scheduleUpdateForTarget(this, 1, false);
-        m_model = GAFAnimatedObject::createAndRun("robot_enemy/robot_enemy.gaf", true);
+        m_model = model;
         CCASSERT(m_model, "Error. Not found player model.");
         if (m_model == nullptr)
             return false;
@@ -44,6 +55,16 @@ bool Enemy::init()
 
 void Enemy::update(float dt)
 {
+    if (m_readyForCleanup)
+    {
+        onDieAnimationFinished();
+    }
+
+    if (m_health <= 0)
+    {
+        return;
+    }
+
     do
     {
         Vec2 newPos = getPosition();
@@ -87,11 +108,27 @@ void Enemy::damage(float value)
 
 void Enemy::die()
 {
-    _eventDispatcher->removeEventListenersForTarget(this);
-    _eventDispatcher->dispatchCustomEvent("enemy_killed");
     setPhysicsBody(nullptr);
+    m_model->setSequenceDelegate(this);
+    if (m_state == EWalkLeft)
+    {
+        m_state = EDieLeft;
+        m_model->playSequence("die_left", false);
+    }
+    else if (m_state == EWalkRight)
+    {
+        m_state = EDieRight;
+        m_model->playSequence("die_right", false);
+    }
+}
+
+void Enemy::onDieAnimationFinished()
+{
+    _eventDispatcher->dispatchCustomEvent("enemy_killed");
+    m_model->setSequenceDelegate(nullptr);
+    _eventDispatcher->removeEventListenersForTarget(this);
     Director::getInstance()->getScheduler()->unscheduleAllForTarget(this);
-    removeAllChildrenWithCleanup(true);
+    //removeAllChildrenWithCleanup(true);
     removeFromParentAndCleanup(true);
 }
 
@@ -135,4 +172,16 @@ bool Enemy::onCollided(PhysicsContact& contact)
         return true;
     }
     return false;
+}
+
+void Enemy::onFinishSequence(GAFAnimatedObject * object, const std::string& sequenceName)
+{
+    if (sequenceName == "die_right" && m_state == EDieRight)
+    {
+        m_readyForCleanup = true;
+    }
+    if (sequenceName == "die_left" && m_state == EDieLeft)
+    {
+        m_readyForCleanup = true;
+    }
 }

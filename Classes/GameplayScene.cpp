@@ -7,6 +7,7 @@
 #include "GAFAnimatedObject.h"
 #include "Gun.h"
 #include "Enemy.h"
+#include "GAFAsset.h"
 
 USING_NS_CC;
 
@@ -33,6 +34,7 @@ bool GameplayScene::init()
         return false;
     }
     
+    m_enemyAsset = GAFAsset::create("robot_enemy/robot_enemy.gaf");
     _eventDispatcher->addCustomEventListener("enemy_killed", CC_CALLBACK_1(GameplayScene::onEnemyKilled, this));
 
     Size visibleSize = Director::getInstance()->getVisibleSize();
@@ -97,8 +99,9 @@ bool GameplayScene::init()
         Vec2 levelScale(0.5, 0.5);
         Vec2 levelPosition(250, 200);
 
-        Node* level = Node::create();
-        addChild(level, 1, 1);
+        m_level = Node::create();
+        m_level->retain();
+        addChild(m_level, 1, 1);
 
         m_player = Player::create();
         Gun* gun = Gun::create("gun_1.plist");
@@ -107,8 +110,8 @@ bool GameplayScene::init()
         m_player->setScale(levelScale.x, levelScale.y);
         addChild(m_player, 1, 2);
 
-        level->setScale(levelScale.x, levelScale.y);
-        level->setPosition(levelPosition);
+        m_level->setScale(levelScale.x, levelScale.y);
+        m_level->setPosition(levelPosition);
         spawnEnemy();
 
         getPhysicsWorld()->setGravity(Vec2(0.0f, 0.0f));
@@ -160,28 +163,23 @@ void GameplayScene::onEnemyKilled(void*)
 
 void GameplayScene::spawnEnemy()
 {
-    Node* level = getChildByTag(1);
-
-    if (level == nullptr)
-        return;
-
-    Enemy* e = Enemy::create();
+    Enemy* e = Enemy::create(m_enemyAsset->createObjectAndRun());
     bool left = rand() % 2;
     if (left)
     {
         Vec2 pos(m_player->getPositionX() + 900, m_player->getPositionY());
-        pos = level->convertToNodeSpace(pos);
+        pos = m_level->convertToNodeSpace(pos);
         e->setPosition(pos);
         e->walkLeft();
-        level->addChild(e);
+        m_level->addChild(e);
     }
     else
     {
         Vec2 pos(m_player->getPositionX() - 900, m_player->getPositionY());
-        pos = level->convertToNodeSpace(pos);
+        pos = m_level->convertToNodeSpace(pos);
         e->setPosition(pos);
         e->walkRight();
-        level->addChild(e);
+        m_level->addChild(e);
     }
 }
 
