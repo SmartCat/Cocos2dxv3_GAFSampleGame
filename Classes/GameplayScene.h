@@ -17,10 +17,11 @@ public:
     void fireButtonCallback(cocos2d::Ref* pSender);
     void leftButtonCallback(cocos2d::Ref* pSender, bool pressed);
     void rightButtonCallback(cocos2d::Ref* pSender, bool pressed);
-    void setGunCallback(cocos2d::Ref* pSender, const std::string& name);
+    void toggleGunButtonCallback(cocos2d::Ref* pSender);
 
     void spawnEnemy();
     void onEnemyKilled(void* data);
 private:
     Player* m_player;
+    int m_gunId = 0;
 };

@@ -1,6 +1,7 @@
 #include "GameplayScene.h"
 #include "MainMenuScene.h"
 #include "CCDoubleTriggerMenuItemLabel.h"
+#include "CCDoubleTriggerMenuItemSprite.h"
 #include "Player.h"
 #include "GAFPrecompiled.h"
 #include "GAFAnimatedObject.h"
@@ -46,44 +47,49 @@ bool GameplayScene::init()
     }
 
     {
-        Label* left = Label::create("<-", "Courier.ttf", 70);
-        Label* right = Label::create("->", "Courier.ttf", 70);
-        MenuItem* leftButton = DoubleTriggerMenuItemLabel::create(left,
+
+        MenuItem* leftButton = DoubleTriggerMenuItemSprite::create(
+            Sprite::create("right_idle.png"),
+            Sprite::create("right_selected.png"),
+            nullptr,
             CC_CALLBACK_1(GameplayScene::leftButtonCallback, this, false),
             CC_CALLBACK_1(GameplayScene::leftButtonCallback, this, true));
 
 
-        MenuItem* rightButton = DoubleTriggerMenuItemLabel::create(right,
+        MenuItem* rightButton = DoubleTriggerMenuItemSprite::create(
+            Sprite::create("right_idle.png"),
+            Sprite::create("right_selected.png"),
+            nullptr,
             CC_CALLBACK_1(GameplayScene::rightButtonCallback, this, false),
             CC_CALLBACK_1(GameplayScene::rightButtonCallback, this, true));
 
+        leftButton->setScaleX(-1);
         rightButton->setPosition(Size(leftButton->getContentSize().width + 40, 0));
         Menu* menu = Menu::create(leftButton, rightButton, NULL);
-        menu->setPosition(leftButton->getContentSize() + Size(0, 10));
+        menu->setPosition(leftButton->getContentSize() + Size(0, -10));
         addChild(menu, 1);
     }
 
     {
-        Label* fire = Label::create("><", "Courier.ttf", 70);
-        MenuItem* fireButton = MenuItemLabel::create(fire, CC_CALLBACK_1(GameplayScene::fireButtonCallback, this));
+        MenuItem* toggleGunButton = MenuItemSprite::create(
+            Sprite::create("gun_idle.png"),
+            Sprite::create("gun_pressed.png"),
+            CC_CALLBACK_1(GameplayScene::toggleGunButtonCallback, this));
+        Menu* menu = Menu::create(toggleGunButton, NULL);
+        menu->setPosition(Vec2::ZERO);
+        addChild(menu, 1);
+        menu->setPosition(Size(toggleGunButton->getContentSize().width, visibleSize.height - toggleGunButton->getContentSize().height));
+    }
+
+    {
+        MenuItem* fireButton = MenuItemSprite::create(
+            Sprite::create("fire_idle.png"),
+            Sprite::create("fire_selected.png"),
+            CC_CALLBACK_1(GameplayScene::fireButtonCallback, this));
+
         fireButton->setPosition(Size(visibleSize.width - fireButton->getContentSize().width, fireButton->getContentSize().height - 10));
         Menu* menu = Menu::create(fireButton, NULL);
         menu->setPosition(Vec2::ZERO);
-        addChild(menu, 1);
-    }
-
-    {
-        Label* one = Label::create("Gun 1", "Courier.ttf", 35);
-        Label* two = Label::create("Gun 2", "Courier.ttf", 35);
-        MenuItem* oneButton = MenuItemLabel::create(one,
-            CC_CALLBACK_1(GameplayScene::setGunCallback, this, "gun_1.plist"));
-
-        MenuItem* twoButton = MenuItemLabel::create(two,
-            CC_CALLBACK_1(GameplayScene::setGunCallback, this, "gun_2.plist"));
-
-        twoButton->setPosition(Size(0, - oneButton->getContentSize().height + 10));
-        Menu* menu = Menu::create(oneButton, twoButton, NULL);
-        menu->setPosition(Size(oneButton->getContentSize().width, visibleSize.height - oneButton->getContentSize().height));
         addChild(menu, 1);
     }
 
@@ -147,11 +153,6 @@ void GameplayScene::rightButtonCallback(cocos2d::Ref* pSender, bool pressed)
     }
 }
 
-void GameplayScene::setGunCallback(cocos2d::Ref* pSender, const std::string& name)
-{
-    m_player->setGun(Gun::create(name));
-}
-
 void GameplayScene::onEnemyKilled(void*)
 {
     spawnEnemy();
@@ -181,5 +182,23 @@ void GameplayScene::spawnEnemy()
         e->setPosition(pos);
         e->walkRight();
         level->addChild(e);
+    }
+}
+
+void GameplayScene::toggleGunButtonCallback(cocos2d::Ref* pSender)
+{
+    int GUNS = 2;
+
+    m_gunId += 1;
+    if (m_gunId > GUNS - 1)
+        m_gunId = 0;
+
+    if (m_gunId == 0)
+    {
+        m_player->setGun(Gun::create("gun_1.plist"));
+    }
+    else if (m_gunId == 1)
+    {
+        m_player->setGun(Gun::create("gun_2.plist"));
     }
 }
