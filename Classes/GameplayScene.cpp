@@ -87,27 +87,27 @@ bool GameplayScene::init()
         addChild(menu, 1);
     }
 
-    Node* level = Node::create();
-    addChild(level, 1, 1);
     {
-        m_player = Player::create();
+        Vec2 levelScale(0.5, 0.5);
+        Vec2 levelPosition(250, 200);
 
-        //Enemy* e = Enemy::create();
-        //level->addChild(e);
+        Node* level = Node::create();
+        addChild(level, 1, 1);
+
+        m_player = Player::create();
+        Gun* gun = Gun::create("gun_1.plist");
+        m_player->setGun(gun);
+        m_player->setPosition(levelPosition);
+        m_player->setScale(levelScale.x, levelScale.y);
+        addChild(m_player, 1, 2);
+
+        level->setScale(levelScale.x, levelScale.y);
+        level->setPosition(levelPosition);
         spawnEnemy();
 
         getPhysicsWorld()->setGravity(Vec2(0.0f, 0.0f));
 
         //getPhysicsWorld()->setDebugDrawMask(0xFF);
-
-
-        auto body = PhysicsBody::createEdgeBox(Size(100, 100), PHYSICSBODY_MATERIAL_DEFAULT, 3);
-        body->setPositionOffset(Vec2(50, 50));
-        body->setContactTestBitmask(0x3);
-
-        Gun* gun = Gun::create("gun_1.plist");
-        m_player->setGun(gun);
-        level->addChild(m_player, 1, 2);
     }
     return true;
 }
@@ -168,13 +168,17 @@ void GameplayScene::spawnEnemy()
     bool left = rand() % 2;
     if (left)
     {
-        e->setPosition(m_player->getPositionX() + 900, 0);
+        Vec2 pos(m_player->getPositionX() + 900, m_player->getPositionY());
+        pos = level->convertToNodeSpace(pos);
+        e->setPosition(pos);
         e->walkLeft();
         level->addChild(e);
     }
     else
     {
-        e->setPosition(m_player->getPositionX() - 900, 0);
+        Vec2 pos(m_player->getPositionX() - 900, m_player->getPositionY());
+        pos = level->convertToNodeSpace(pos);
+        e->setPosition(pos);
         e->walkRight();
         level->addChild(e);
     }

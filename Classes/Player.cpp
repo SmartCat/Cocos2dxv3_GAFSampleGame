@@ -55,35 +55,40 @@ bool Player::init()
 
 void Player::update(float dt)
 {
+    Rect rect = m_model->realBoundingBoxForCurrentFrame();
+    Vec3 scale, pos; Quaternion rot;
+    getNodeToWorldTransform().decompose(&scale, &rot, &pos);
+
     do
     {
-        Vec2 newPos = getPosition();
+        Node* level = Director::getInstance()->getRunningScene()->getChildByTag(1);
+        if (level == nullptr)
+        {
+            break;
+        }
+        Vec2 position = level->getPosition();
         if (m_state == EWalkLeft)
         {
-            newPos += dt * m_speed * Vec2(-1, 0);
+            position += dt * m_speed * Vec2(scale.x, 0);
         }
         else if (m_state == EWalkRight)
         {
-            newPos += dt * m_speed * Vec2(1, 0);
+            position += dt * m_speed * Vec2(-scale.x, 0);
         }
         else
         {
             break;
         }
-        Node* level = Director::getInstance()->getRunningScene()->getChildByTag(1);
-        if (level)
-        {
-            setPosition(newPos);
-            level->setPosition(-newPos.x, newPos.y);
-        }
+        level->setPosition(position);
+
     } while (0);
 
-
-    Rect rect = m_model->realBoundingBoxForCurrentFrame();
-    auto body = PhysicsBody::createBox(rect.size, PHYSICSBODY_MATERIAL_DEFAULT);
-    body->setPositionOffset(rect.origin + rect.size / 2);
+    Size boxSize(rect.size.width * scale.x, rect.size.height * scale.y);
+    Vec2 boxPos(rect.origin.x * scale.x + boxSize.width / 2, rect.origin.y * scale.y + boxSize.height / 2);
+    auto body = PhysicsBody::createBox(boxSize, PHYSICSBODY_MATERIAL_DEFAULT);
+    body->setPositionOffset(boxPos);
     setPhysicsBody(body);
-    body->setCategoryBitmask(0x2);
+    body->setContactTestBitmask(0x2);
 
 }
 

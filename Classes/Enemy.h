@@ -27,12 +27,13 @@ public:
 
     void walkLeft();
     void walkRight();
-    void stop();
 
     void die();
+
+    bool onCollided(cocos2d::PhysicsContact& contact);
 private:
     EState m_state = ENone;
     GAFAnimatedObject* m_model = nullptr;
-    float m_speed = 200;
+    float m_speed = 350;
     float m_health = 1;
 };

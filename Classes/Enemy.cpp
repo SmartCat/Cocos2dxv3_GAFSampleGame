@@ -2,6 +2,7 @@
 #include "GAFPrecompiled.h"
 #include "GAFAnimatedObject.h"
 #include "GAFSprite.h"
+#include "Player.h"
 
 USING_NS_CC;
 
@@ -18,6 +19,7 @@ bool Enemy::init()
 {
     bool ret = true;
     {
+
         Director::getInstance()->getScheduler()->scheduleUpdateForTarget(this, 1, false);
         m_model = GAFAnimatedObject::createAndRun("robot_enemy/robot_enemy.gaf", true);
         CCASSERT(m_model, "Error. Not found player model.");
@@ -31,6 +33,11 @@ bool Enemy::init()
         m_model->setPosition(100, 500);
         m_model->setScale(1);
         walkLeft();
+
+
+        auto contactListener = EventListenerPhysicsContact::create();
+        contactListener->onContactBegin = CC_CALLBACK_1(Enemy::onCollided, this);
+        _eventDispatcher->addEventListenerWithFixedPriority(contactListener, 1);
     }
     return ret;
 }
@@ -55,12 +62,18 @@ void Enemy::update(float dt)
         setPosition(newPos);
     } while (0);
 
-
     Rect rect = m_model->realBoundingBoxForCurrentFrame();
-    auto body = PhysicsBody::createBox(rect.size, PHYSICSBODY_MATERIAL_DEFAULT);
-    body->setPositionOffset(rect.origin + rect.size / 2);
+    Vec3 scale, pos; Quaternion rot;
+    getNodeToWorldTransform().decompose(&scale, &rot, &pos);
+
+    Size boxSize(rect.size.width * scale.x, rect.size.height * scale.y);
+    Vec2 boxPos(rect.origin.x * scale.x + boxSize.width / 2, rect.origin.y * scale.y + boxSize.height / 2);
+
+    auto body = PhysicsBody::createBox(boxSize, PHYSICSBODY_MATERIAL_DEFAULT);
+    body->setPositionOffset(boxPos);
     setPhysicsBody(body);
-    body->setContactTestBitmask(0x3);
+    body->setContactTestBitmask(0x2);
+
 }
 
 void Enemy::damage(float value)
@@ -74,6 +87,7 @@ void Enemy::damage(float value)
 
 void Enemy::die()
 {
+    _eventDispatcher->removeEventListenersForTarget(this);
     _eventDispatcher->dispatchCustomEvent("enemy_killed");
     setPhysicsBody(nullptr);
     Director::getInstance()->getScheduler()->unscheduleAllForTarget(this);
@@ -99,24 +113,26 @@ void Enemy::walkRight()
     m_state = EWalkRight;
 }
 
-void Enemy::stop()
+bool Enemy::onCollided(PhysicsContact& contact)
 {
-    if (m_state == EStandLeft || m_state == EStandRight)
-        return;
+    if (getPhysicsBody() == nullptr)
+        return false;
 
-    if (m_state == EWalkRight)
+    if (contact.getShapeA()->getBody() == getPhysicsBody() || contact.getShapeB()->getBody() == getPhysicsBody())
     {
-        m_model->playSequence("stand_right", true);
-        m_state = EStandRight;
+        Player* p = dynamic_cast<Player*>(contact.getShapeA()->getBody()->getNode());
+        if (p)
+        {
+            die();
+            return true;
+        }
+        p = dynamic_cast<Player*>(contact.getShapeB()->getBody()->getNode());
+        if (p)
+        {
+            die();
+            return true;
+        }
+        return true;
     }
-    else if (m_state == EWalkLeft)
-    {
-        m_model->playSequence("stand_left", true);
-        m_state = EStandLeft;
-    }
-    else
-    {
-        m_model->playSequence("stand_right", true);
-        m_state = EStandRight;
-    }
+    return false;
 }

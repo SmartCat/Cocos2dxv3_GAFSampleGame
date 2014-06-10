@@ -35,5 +35,5 @@ private:
     EState m_state = ENone;
     Gun*   m_gun = nullptr;
     GAFAnimatedObject* m_model = nullptr;
-    float m_speed = 200;
+    float m_speed = 270;
 };

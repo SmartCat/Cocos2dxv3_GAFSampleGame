@@ -22,13 +22,16 @@ bool Projectile::init(GAFAnimatedObject* model, float damage, float velocity, No
     cocos2d::Director::getInstance()->getScheduler()->scheduleUpdate(this, 1, false);
 
     model->setFrame(0);
-    Rect visibleRect = model->realBoundingBoxForCurrentFrame();
-    auto body = PhysicsBody::createBox(visibleRect.size, PHYSICSBODY_MATERIAL_DEFAULT);
-    Mat4 transform = parent->getNodeToWorldTransform();
 
+    Mat4 transform = parent->getNodeToWorldTransform();
     Vec3 position, scale;
     Quaternion rotation;
     transform.decompose(&scale, &rotation, &position);
+    Rect rect = model->realBoundingBoxForCurrentFrame();
+    Size boxSize(rect.size.width * scale.x, rect.size.height * scale.y);
+    Vec2 boxPos(rect.origin.x * scale.x + boxSize.width / 2, rect.origin.y * scale.y + boxSize.height / 2);
+    auto body = PhysicsBody::createBox(boxSize, PHYSICSBODY_MATERIAL_DEFAULT);
+
     rotation.normalize();
     float angle = 2.0f * acos(rotation.w);
 
