@@ -35,9 +35,10 @@ bool Player::init()
 {
     bool ret = true;
     {
-        Director::getInstance()->getScheduler()->scheduleUpdateForTarget(this, 1, false);
+        Director::getInstance()->getScheduler()->scheduleUpdate(this, 1, false);
 
         m_model = GAFAnimatedObject::createAndRun("roboprogrm/roboprogrm.gaf", true);
+        m_model->setFps(m_model->getFps() * 1.4);
         CCASSERT(m_model, "Error. Not found player model.");
         if (m_model == nullptr)
             return false;
@@ -45,7 +46,6 @@ bool Player::init()
         m_model->pause();
         addChild(m_model);
         m_model->retain();
-        Size screen = Director::getInstance()->getVisibleSize();
         m_model->setPosition(100, 500);
         m_model->setScale(1);
         stop();        

@@ -89,7 +89,7 @@ bool GameplayScene::init()
             Sprite::create("fire_selected.png"),
             CC_CALLBACK_1(GameplayScene::fireButtonCallback, this));
 
-        fireButton->setPosition(Size(visibleSize.width - fireButton->getContentSize().width, fireButton->getContentSize().height - 10));
+        fireButton->setPosition(Size(visibleSize.width - fireButton->getContentSize().width - 50, fireButton->getContentSize().height - 10));
         Menu* menu = Menu::create(fireButton, NULL);
         menu->setPosition(Vec2::ZERO);
         addChild(menu, 1);

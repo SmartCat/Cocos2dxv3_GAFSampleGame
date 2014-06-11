@@ -38,7 +38,7 @@ public:
 private:
     EState m_state = ENone;
     GAFAnimatedObject* m_model = nullptr;
-    float m_speed = 350;
+    float m_speed = 400;
     float m_health = 2;
     bool m_readyForCleanup = false;
 };
