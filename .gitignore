@@ -13,3 +13,15 @@ ipch
 *.xcscheme
 *.xcworkspacedata
 *.xcuserstate
+*.o
+*.a
+*.d
+*.ilk
+*.so
+/proj.android/gen
+/proj.android/libs
+/proj.android/obj
+/proj.android/bin
+/proj.android/assets
+/proj.win32/Debug.win32
+/proj.win32/Debug

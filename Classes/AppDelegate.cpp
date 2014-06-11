@@ -25,10 +25,22 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setDisplayStats(true);
 #endif
 
-    glClearColor(0.5, 0.5, 0.5, 1.0);
-
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
+
+    glview->setDesignResolutionSize(1024, 768, ResolutionPolicy::FIXED_WIDTH);
+
+    Size winSize = director->getVisibleSize();
+    if (winSize.height > 768)
+    {
+        director->setContentScaleFactor(2.0);
+    }
+    else
+    {
+        director->setContentScaleFactor(1.0);
+    }
+
+    glClearColor(0.5, 0.5, 0.5, 1.0);
 
     // create a scene. it's an autorelease object
     auto scene = MainMenuScene::create();
