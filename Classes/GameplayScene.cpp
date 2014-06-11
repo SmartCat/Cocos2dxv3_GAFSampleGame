@@ -87,7 +87,7 @@ bool GameplayScene::init()
 
         fireButton->setPosition(Size(-fireButton->getContentSize().width, fireButton->getContentSize().height));
         Menu* menu = Menu::create(fireButton, toggleGunButton, NULL);
-        menu->setPosition(Size(visibleSize.width - 50, -10));
+        menu->setPosition(Size(visibleSize.width, -10));
         addChild(menu, 1);
     }
 
