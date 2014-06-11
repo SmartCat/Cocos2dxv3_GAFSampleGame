@@ -23,6 +23,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 					../../Classes/Projectile.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \
+					$(LOCAL_PATH)/../../cocos2d/external/GafPlayer/Library \
 					$(LOCAL_PATH)/../../cocos2d/external/GafPlayer/Library/Sources
 
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
