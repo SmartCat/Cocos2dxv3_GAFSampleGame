@@ -7,7 +7,7 @@
 	<key>pivot_x</key>
 	<real>-205</real>
 	<key>pivot_y</key>
-	<real>180</real>
+	<real>190</real>
 	<key>projectile</key>
 	<string>laser/laser.gaf</string>
 	<key>emission_point_x</key>
@@ -23,8 +23,8 @@
 	<key>damage</key>
 	<real>10</real>
 	<key>reload_time</key>
-	<real>1</real>
+	<real>0.9</real>
 	<key>shoot_delay</key>
-	<real>0.8</real>
+	<real>0.4</real>
 </dict>
 </plist>

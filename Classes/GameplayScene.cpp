@@ -77,21 +77,17 @@ bool GameplayScene::init()
             Sprite::create("gun_idle.png"),
             Sprite::create("gun_pressed.png"),
             CC_CALLBACK_1(GameplayScene::toggleGunButtonCallback, this));
-        Menu* menu = Menu::create(toggleGunButton, NULL);
-        menu->setPosition(Vec2::ZERO);
-        addChild(menu, 1);
-        menu->setPosition(Size(toggleGunButton->getContentSize().width, visibleSize.height - toggleGunButton->getContentSize().height));
-    }
 
-    {
         MenuItem* fireButton = MenuItemSprite::create(
             Sprite::create("fire_idle.png"),
             Sprite::create("fire_selected.png"),
             CC_CALLBACK_1(GameplayScene::fireButtonCallback, this));
 
-        fireButton->setPosition(Size(visibleSize.width - fireButton->getContentSize().width - 50, fireButton->getContentSize().height - 10));
-        Menu* menu = Menu::create(fireButton, NULL);
-        menu->setPosition(Vec2::ZERO);
+        toggleGunButton->setPosition(Size(- toggleGunButton->getContentSize().width - fireButton->getContentSize().width - 40, fireButton->getContentSize().height));
+
+        fireButton->setPosition(Size(-fireButton->getContentSize().width, fireButton->getContentSize().height));
+        Menu* menu = Menu::create(fireButton, toggleGunButton, NULL);
+        menu->setPosition(Size(visibleSize.width - 50, -10));
         addChild(menu, 1);
     }
 

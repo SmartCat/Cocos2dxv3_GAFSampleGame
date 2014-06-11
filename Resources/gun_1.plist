@@ -21,7 +21,7 @@
 	<key>projectile_speed</key>
 	<real>5000</real>
 	<key>damage</key>
-	<real>1</real>
+	<real>2</real>
 	<key>reload_time</key>
 	<real>0.5</real>
 	<key>shoot_delay</key>
