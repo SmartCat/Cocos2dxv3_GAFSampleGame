@@ -40,7 +40,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setContentScaleFactor(1.0);
     }
 
-    glClearColor(0.5, 0.5, 0.5, 1.0);
+    glClearColor(1, 1, 1, 1.0);
 
     // create a scene. it's an autorelease object
     auto scene = MainMenuScene::create();

@@ -41,6 +41,7 @@ bool GameplayScene::init()
     
     {
         Label* text = Label::create("Menu", "Courier.ttf", 35);
+        text->setColor(Color3B(0, 0, 0));
         MenuItem* menuButton = MenuItemLabel::create(text, CC_CALLBACK_1(GameplayScene::advanceToMenu, this));
         menuButton->setPosition(visibleSize - menuButton->getContentSize());
         Menu* menu = Menu::create(menuButton, NULL);

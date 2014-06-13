@@ -1,5 +1,7 @@
 #include "MainMenuScene.h"
 #include "GameplayScene.h"
+#include "GAFPrecompiled.h"
+#include "GAFAnimatedObject.h"
 
 USING_NS_CC;
 
@@ -13,10 +15,17 @@ bool MainMenuScene::init()
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
 
-    Label* text = Label::create("Start Game", "Courier.ttf", 35);
-    MenuItem* startButton = MenuItemLabel::create(text, CC_CALLBACK_1(MainMenuScene::advanceToGame, this));
-    startButton->setPosition(visibleSize / 2);
+    GAFAnimatedObject* logo = GAFAnimatedObject::createAndRun("logo/logo.gaf", false);
+    logo->setPosition(0, visibleSize.height);
+    addChild(logo);
+
+    MenuItem* startButton = MenuItemSprite::create(
+        Sprite::create("button_logo_idle.png"),
+        Sprite::create("button_logo_selected.png"),
+        CC_CALLBACK_1(MainMenuScene::advanceToGame, this));
     Menu* menu = Menu::create(startButton, NULL);
+
+    startButton->setPosition(visibleSize.width / 2, 50);
     menu->setPosition(Vec2::ZERO);
     addChild(menu, 1);
 
