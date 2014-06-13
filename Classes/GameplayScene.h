@@ -8,6 +8,8 @@ class Player;
 class GameplayScene : public cocos2d::Scene
 {
 public:
+    GameplayScene();
+    ~GameplayScene();
     virtual bool init();  
     
     // Creates with physics

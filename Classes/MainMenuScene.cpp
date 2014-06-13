@@ -5,6 +5,14 @@
 
 USING_NS_CC;
 
+MainMenuScene::MainMenuScene()
+{
+
+}
+MainMenuScene::~MainMenuScene()
+{
+    removeAllChildrenWithCleanup(true);
+}
 
 bool MainMenuScene::init()
 {

@@ -1,5 +1,4 @@
 #include "GameplayScene.h"
-#include "MainMenuScene.h"
 #include "CCDoubleTriggerMenuItemLabel.h"
 #include "CCDoubleTriggerMenuItemSprite.h"
 #include "Player.h"
@@ -10,6 +9,15 @@
 #include "GAFAsset.h"
 
 USING_NS_CC;
+
+GameplayScene::GameplayScene()
+{
+
+}
+GameplayScene::~GameplayScene()
+{
+    removeAllChildrenWithCleanup(true);
+}
 
 GameplayScene* GameplayScene::create()
 {
@@ -97,7 +105,6 @@ bool GameplayScene::init()
         Vec2 levelPosition(250, 200);
 
         m_level = Node::create();
-        m_level->retain();
         addChild(m_level, 1, 1);
 
         m_player = Player::create();
@@ -120,8 +127,7 @@ bool GameplayScene::init()
 
 void GameplayScene::advanceToMenu(cocos2d::Ref* pSender)
 {
-    Scene* menu = MainMenuScene::create();
-    Director::getInstance()->pushScene(menu);
+    Director::getInstance()->popScene();
 }
 
 void GameplayScene::fireButtonCallback(cocos2d::Ref* pSender)

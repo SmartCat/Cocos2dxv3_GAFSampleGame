@@ -5,6 +5,9 @@
 class MainMenuScene : public cocos2d::Scene
 {
 public:
+    MainMenuScene();
+    ~MainMenuScene();
+
     virtual bool init();  
     
     CREATE_FUNC(MainMenuScene);

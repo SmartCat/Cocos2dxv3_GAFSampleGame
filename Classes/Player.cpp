@@ -23,6 +23,7 @@ void Player::setGun(Gun* gun)
     int n = m_model->objectIdByObjectName("ROBOT.GUN");
     auto obj = m_model->subObjectForInnerObjectId(n);
     obj->removeChild(m_gun, true);
+    CC_SAFE_RELEASE(m_gun);
     m_gun = gun;
     m_gun->retain();
 

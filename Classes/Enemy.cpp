@@ -20,6 +20,7 @@ Enemy* Enemy::create(GAFAnimatedObject* model)
     Enemy* ret = new Enemy();
     if (ret && ret->init(model))
     {
+        ret->autorelease();
         return ret;
     }
     delete ret;
