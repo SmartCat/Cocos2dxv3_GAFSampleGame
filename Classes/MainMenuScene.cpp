@@ -35,6 +35,7 @@ bool MainMenuScene::init()
 
     startButton->setPosition(visibleSize.width / 2, 50);
     menu->setPosition(Vec2::ZERO);
+    menu->setTag(1);
     addChild(menu, 1);
 
     return true;
@@ -43,7 +44,8 @@ bool MainMenuScene::init()
 
 void MainMenuScene::advanceToGame(cocos2d::Ref* pSender)
 {
+    removeChildByTag(1);
     Scene* gameplay = GameplayScene::create();
-    Director::getInstance()->pushScene(gameplay);
+    Director::getInstance()->replaceScene(gameplay);
 }
 

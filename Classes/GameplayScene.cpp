@@ -1,4 +1,5 @@
 #include "GameplayScene.h"
+#include "MainMenuScene.h"
 #include "CCDoubleTriggerMenuItemLabel.h"
 #include "CCDoubleTriggerMenuItemSprite.h"
 #include "Player.h"
@@ -17,6 +18,7 @@ GameplayScene::GameplayScene()
 GameplayScene::~GameplayScene()
 {
     removeAllChildrenWithCleanup(true);
+    _eventDispatcher->removeCustomEventListeners("enemy_killed");
 }
 
 GameplayScene* GameplayScene::create()
@@ -127,7 +129,8 @@ bool GameplayScene::init()
 
 void GameplayScene::advanceToMenu(cocos2d::Ref* pSender)
 {
-    Director::getInstance()->popScene();
+    auto* scene = MainMenuScene::create();
+    Director::getInstance()->replaceScene(scene);
 }
 
 void GameplayScene::fireButtonCallback(cocos2d::Ref* pSender)
