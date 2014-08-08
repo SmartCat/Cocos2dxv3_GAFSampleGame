@@ -20,7 +20,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 					../../Classes/Gun.cpp \
 					../../Classes/MainMenuScene.cpp \
 					../../Classes/Player.cpp \
-					../../Classes/Projectile.cpp
+					../../Classes/Projectile.cpp \
+					../../Classes/Background.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \
 					$(LOCAL_PATH)/../../cocos2d/external/GafPlayer/Library \
