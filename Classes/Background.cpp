@@ -26,11 +26,6 @@ bool Background::init()
 		GAFAnimatedObject* tile = m_masterTile->createObjectAndRun();
 		tile->retain();
 
-		/*if (m_scale == 0.0f)
-		{
-			int tileHeight = tile->getContentSize().height;
-			m_scale = visibleSize.height / tile->getContentSize().height;
-		}*/
 		if (m_tileWidth == 0)
 		{
 			m_tileWidth = tile->getContentSize().width;
@@ -59,7 +54,7 @@ void Background::update(float dt)
 
 	Vec2 position = level->getPosition();
 
-	int newPos = static_cast<int>(position.x) % m_tileWidth;
+	float newPos = fmodf(position.x, m_tileWidth);
 	if (position.x > 0.f)
 	{
 		newPos -= m_tileWidth;
@@ -72,13 +67,15 @@ void Background::cleanupTiles()
 	//TODO: variant #2
 }
 
-void Background::repositionTilesStartingFrom(int startX)
+void Background::repositionTilesStartingFrom(float startX)
 {
 	Size visibleSize = Director::getInstance()->getVisibleSize();
-	int totalSize = 0;
-	for each (GAFAnimatedObject* obj in m_tiles)
+	float totalSize = 0.f;
+    std::deque<GAFAnimatedObject*>::iterator it;
+	for (it = m_tiles.begin(); it != m_tiles.end(); it++)
 	{
-		obj->setPosition(totalSize + startX, (visibleSize.height + obj->getContentSize().height) / 2);
-		totalSize += m_tileWidth - 1;
+		(*it)->setPosition(totalSize + startX, visibleSize.height);
+		totalSize += m_tileWidth - 1.0f;
+        
 	}
 }

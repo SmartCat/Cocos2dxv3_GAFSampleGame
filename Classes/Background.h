@@ -17,11 +17,10 @@ public:
 	void update(float dt);
 
 private:
-	void repositionTilesStartingFrom(int startX);
+	void repositionTilesStartingFrom(float startX);
 	void cleanupTiles();
 
 	std::deque<GAFAnimatedObject*> m_tiles;
 	GAFAsset* m_masterTile;
 	int m_tileWidth = 0;
-	//float m_scale = 0.0f;
 };
