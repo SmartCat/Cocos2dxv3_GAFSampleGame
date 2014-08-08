@@ -28,7 +28,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
 
-    glview->setDesignResolutionSize(1024, 768, ResolutionPolicy::FIXED_WIDTH);
+    glview->setDesignResolutionSize(1024, 768, ResolutionPolicy::FIXED_HEIGHT);
 
     Size winSize = director->getVisibleSize();
     if (winSize.height > 768)

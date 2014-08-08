@@ -7,6 +7,7 @@
 #include "GAFAnimatedObject.h"
 #include "Gun.h"
 #include "Enemy.h"
+#include "Background.h"
 #include "GAFAsset.h"
 
 USING_NS_CC;
@@ -108,6 +109,9 @@ bool GameplayScene::init()
 
         m_level = Node::create();
         addChild(m_level, 1, 1);
+
+		Background* bg = Background::create();
+		addChild(bg);
 
         m_player = Player::create();
         Gun* gun = Gun::create("gun_1.plist");
