@@ -26,7 +26,6 @@ bool MainMenuScene::init()
     GAFAnimatedObject* logo = GAFAnimatedObject::createAndRun("logo/logo.gaf", false);
     logo->setPosition(0, visibleSize.height);
     addChild(logo);
-	logo->start();
 
     MenuItem* startButton = MenuItemSprite::create(
         Sprite::create("button_logo_idle.png"),
