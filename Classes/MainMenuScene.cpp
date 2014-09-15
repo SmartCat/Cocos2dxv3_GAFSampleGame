@@ -23,11 +23,12 @@ bool MainMenuScene::init()
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
 
-    GAFAnimatedObject* logo = GAFAnimatedObject::createAndRun("logo/logo.gaf", false);
+    auto logo = GAFAnimatedObject::createAndRun("logo/logo.gaf", false);
     logo->setPosition(0, visibleSize.height);
     addChild(logo);
+	logo->start();
 
-    MenuItem* startButton = MenuItemSprite::create(
+	MenuItem* startButton = MenuItemSprite::create(
         Sprite::create("button_logo_idle.png"),
         Sprite::create("button_logo_selected.png"),
         CC_CALLBACK_1(MainMenuScene::advanceToGame, this));
@@ -37,6 +38,8 @@ bool MainMenuScene::init()
     menu->setPosition(Vec2::ZERO);
     menu->setTag(1);
     addChild(menu, 1);
+	
+	glClearColor(1, 1, 1, 1.0);
 
     return true;
 }
