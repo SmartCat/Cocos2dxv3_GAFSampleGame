@@ -37,6 +37,8 @@ bool MainMenuScene::init()
     menu->setPosition(Vec2::ZERO);
     menu->setTag(1);
     addChild(menu, 1);
+	
+	glClearColor(1, 1, 1, 1.0);
 
     return true;
 }

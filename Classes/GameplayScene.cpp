@@ -52,7 +52,7 @@ bool GameplayScene::init()
     
     {
         Label* text = Label::create("Menu", "Courier.ttf", 35);
-        text->setColor(Color3B(0, 0, 0));
+        text->setColor(Color3B(255, 255, 255));
         MenuItem* menuButton = MenuItemLabel::create(text, CC_CALLBACK_1(GameplayScene::advanceToMenu, this));
         menuButton->setPosition(visibleSize - menuButton->getContentSize());
         Menu* menu = Menu::create(menuButton, NULL);
@@ -128,6 +128,9 @@ bool GameplayScene::init()
 
         //getPhysicsWorld()->setDebugDrawMask(0xFF);
     }
+	
+	glClearColor(0, 0, 0, 1.0);
+	
     return true;
 }
 
