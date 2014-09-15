@@ -23,12 +23,12 @@ bool MainMenuScene::init()
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
 
-    auto logo = GAFAnimatedObject::createAndRun("logo/logo.gaf", false);
+    GAFAnimatedObject* logo = GAFAnimatedObject::createAndRun("logo/logo.gaf", false);
     logo->setPosition(0, visibleSize.height);
     addChild(logo);
 	logo->start();
 
-	MenuItem* startButton = MenuItemSprite::create(
+    MenuItem* startButton = MenuItemSprite::create(
         Sprite::create("button_logo_idle.png"),
         Sprite::create("button_logo_selected.png"),
         CC_CALLBACK_1(MainMenuScene::advanceToGame, this));
