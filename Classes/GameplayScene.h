@@ -10,10 +10,10 @@ class GameplayScene : public cocos2d::Scene
 public:
     GameplayScene();
     ~GameplayScene();
-    virtual bool init();  
+    virtual bool init(int enemies);
     
     // Creates with physics
-    static GameplayScene* create();
+    static GameplayScene* create(int enemies);
 
     void advanceToMenu(cocos2d::Ref* pSender);
 
@@ -29,4 +29,5 @@ private:
     int m_gunId = 0;
     cocos2d::Node* m_level;
     GAFAsset* m_enemyAsset;
+    int m_robots;
 };
