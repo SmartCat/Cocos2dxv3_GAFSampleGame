@@ -5,6 +5,7 @@
 #include "Gun.h"
 
 USING_NS_CC;
+using namespace gaf;
 
 Player::Player()
 {

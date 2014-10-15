@@ -11,6 +11,7 @@
 #include "GAFAsset.h"
 
 USING_NS_CC;
+using namespace gaf;
 
 GameplayScene::GameplayScene()
 :m_robots(0)

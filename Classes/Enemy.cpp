@@ -5,6 +5,7 @@
 #include "Player.h"
 
 USING_NS_CC;
+using namespace gaf;
 
 Enemy::Enemy()
 {

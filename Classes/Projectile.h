@@ -2,15 +2,18 @@
 
 #include "cocos2d.h"
 
-class GAFAnimatedObject;
+namespace gaf
+{
+    class GAFAnimatedObject;
+}
 
 class Projectile : public cocos2d::Node
 {
 public:
     Projectile();
     virtual ~Projectile();
-    virtual bool init(GAFAnimatedObject* model, float damage, float velocity, cocos2d::Node* parent);
-    static Projectile* create(GAFAnimatedObject* model, float damage, float velocity, cocos2d::Node* parent);
+    virtual bool init(gaf::GAFAnimatedObject* model, float damage, float velocity, cocos2d::Node* parent);
+    static Projectile* create(gaf::GAFAnimatedObject* model, float damage, float velocity, cocos2d::Node* parent);
 
     bool onCollided(cocos2d::PhysicsContact& contact);
     void destroy();

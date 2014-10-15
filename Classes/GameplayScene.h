@@ -2,7 +2,11 @@
 
 #include "cocos2d.h"
 
-class GAFAsset;
+namespace gaf
+{
+    class GAFAsset;
+}
+
 class Player;
 
 class GameplayScene : public cocos2d::Scene
@@ -28,6 +32,6 @@ private:
     Player* m_player;
     int m_gunId = 0;
     cocos2d::Node* m_level;
-    GAFAsset* m_enemyAsset;
+    gaf::GAFAsset* m_enemyAsset;
     int m_robots;
 };

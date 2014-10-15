@@ -2,7 +2,10 @@
 
 #include "cocos2d.h"
 
-class GAFAnimatedObject;
+namespace gaf
+{
+    class GAFAnimatedObject;
+}
 class Gun;
 
 class Player : public cocos2d::Node
@@ -34,6 +37,6 @@ public:
 private:
     EState m_state = ENone;
     Gun*   m_gun = nullptr;
-    GAFAnimatedObject* m_model = nullptr;
+    gaf::GAFAnimatedObject* m_model = nullptr;
     float m_speed = 350;
 };

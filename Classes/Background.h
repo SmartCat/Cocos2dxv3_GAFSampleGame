@@ -2,8 +2,11 @@
 #include "GAFPrecompiled.h"
 #include "cocos2d.h"
 
-class GAFAsset;
-class GAFAnimatedObject;
+namespace gaf
+{
+    class GAFAsset;
+    class GAFAnimatedObject;
+}
 
 class Background : public cocos2d::Node
 {
@@ -20,7 +23,7 @@ private:
 	void repositionTilesStartingFrom(float startX);
 	void cleanupTiles();
 
-	std::deque<GAFAnimatedObject*> m_tiles;
-	GAFAsset* m_masterTile;
+	std::deque<gaf::GAFAnimatedObject*> m_tiles;
+	gaf::GAFAsset* m_masterTile;
 	int m_tileWidth = 0;
 };
