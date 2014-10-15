@@ -296,21 +296,20 @@ void Text::labelScaleChangedWithSize()
 {
     if (_ignoreSize)
     {
-        _labelRenderer->setDimensions(0,0);
         _labelRenderer->setScale(1.0f);
         _normalScaleValueX = _normalScaleValueY = 1.0f;
     }
     else
     {
-        _labelRenderer->setDimensions(_size.width,_size.height);
+        _labelRenderer->setDimensions(_contentSize.width,_contentSize.height);
         Size textureSize = _labelRenderer->getContentSize();
         if (textureSize.width <= 0.0f || textureSize.height <= 0.0f)
         {
             _labelRenderer->setScale(1.0f);
             return;
         }
-        float scaleX = _size.width / textureSize.width;
-        float scaleY = _size.height / textureSize.height;
+        float scaleX = _contentSize.width / textureSize.width;
+        float scaleY = _contentSize.height / textureSize.height;
         _labelRenderer->setScaleX(scaleX);
         _labelRenderer->setScaleY(scaleY);
         _normalScaleValueX = scaleX;
@@ -324,19 +323,23 @@ std::string Text::getDescription() const
     return "Label";
 }
     
-void Text::updateTextureColor()
-{
-    updateColorToRenderer(_labelRenderer);
+
+    
+void Text::enableShadow(const Color4B& shadowColor,const Size &offset, int blurRadius) {
+    _labelRenderer->enableShadow(shadowColor, offset, blurRadius);
 }
 
-void Text::updateTextureOpacity()
-{
-    updateOpacityToRenderer(_labelRenderer);
+void Text::enableOutline(const Color4B& outlineColor,int outlineSize) {
+    _labelRenderer->enableOutline(outlineColor, outlineSize);
+}
+    
+void Text::enableGlow(const Color4B& glowColor) {
+    if (_type == Type::TTF)
+        _labelRenderer->enableGlow(glowColor);
 }
 
-void Text::updateTextureRGBA()
-{
-    updateRGBAToRenderer(_labelRenderer);
+void Text::disableEffect() {
+    _labelRenderer->disableEffect();
 }
 
 Widget* Text::createCloneInstance()
@@ -350,7 +353,7 @@ void Text::copySpecialProperties(Widget *widget)
     if (label)
     {
         setFontName(label->_fontName);
-        setFontSize(label->_labelRenderer->getSystemFontSize());
+        setFontSize(label->getFontSize());
         setString(label->getString());
         setTouchScaleChangeEnabled(label->_touchScaleChangeEnabled);
         setTextHorizontalAlignment(label->_labelRenderer->getHorizontalAlignment());
