@@ -33,6 +33,7 @@ public:
     void onEnemyKilled(void* data);
 private:
     void checkCollisionsSimple();
+    float checkForProjectilesDamage(const float enemyX, const float epsDistance);
 
     Player* m_player;
     int m_gunId = 0;

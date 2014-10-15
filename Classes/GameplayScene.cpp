@@ -13,6 +13,7 @@
 
 USING_NS_CC;
 using namespace gaf;
+typedef cocos2d::Vector<cocos2d::Node*> Nodes_t;
 
 GameplayScene::GameplayScene()
 :m_robots(0)
@@ -180,10 +181,8 @@ void GameplayScene::onEnemyKilled(void*)
 
 void GameplayScene::checkCollisionsSimple()
 {
-    typedef cocos2d::Vector<cocos2d::Node*> Nodes_t;
     Nodes_t nodes = m_level->getChildren();
 
-    cocos2d::Node* projectile = getChildByTag(TAG_PROJECTILE);
     const double playerHalfWidth = m_player->getSize().width / 2;
     
     for (Nodes_t::iterator it = nodes.begin(); it != nodes.end(); ++it)
@@ -208,21 +207,35 @@ void GameplayScene::checkCollisionsSimple()
                 e->die();
             }
             
-            if (projectile)
+            float damage = checkForProjectilesDamage(enemyX, distCollisionProjectileEnemy);
+            if (damage > 0.f && !e->isDying())
             {
-                Projectile *p = reinterpret_cast<Projectile*>(projectile);
-                double distToProjectile = fabs(projectile->getPositionX() - enemyX);
-                if (distToProjectile <= distCollisionProjectileEnemy)
-                {
-                    if (!e->isDying())
-                    {
-                        e->damage(p->getDamage());
-                    }
-                    p->destroy();
-                }
+                e->damage(damage);
             }
         }
     }
+}
+
+float GameplayScene::checkForProjectilesDamage(const float enemyX, const float epsDistance)
+{
+    Nodes_t nodes = getChildren();
+
+    for (Nodes_t::iterator it = nodes.begin(); it != nodes.end(); ++it)
+    {
+        if ((*it)->getTag() == TAG_PROJECTILE)
+        {
+            Projectile *p = reinterpret_cast<Projectile*>(*it);
+
+            double distToProjectile = fabs(p->getPositionX() - enemyX);
+            if (distToProjectile <= epsDistance)
+            {
+                p->destroy();
+                return p->getDamage();
+            }
+        }
+    }
+
+    return 0.f;
 }
 
 void GameplayScene::spawnEnemy()
