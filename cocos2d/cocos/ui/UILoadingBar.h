@@ -89,7 +89,7 @@ public:
      *
      * @param texture   file name of texture.
      *
-     * @param texType    @see UI_TEX_TYPE_LOCAL
+     * @param texType    @see TextureResType
      */
     void loadTexture(const std::string& texture,TextureResType texType = TextureResType::LOCAL);
     
@@ -141,14 +141,14 @@ public:
 protected:
     virtual void initRenderer() override;
     virtual void onSizeChanged() override;
-    virtual void updateTextureColor() override;
-    virtual void updateTextureOpacity() override;
-    virtual void updateTextureRGBA() override;
+   
     void setScale9Scale();
     void barRendererScaleChangedWithSize();
+    
+    virtual void adaptRenderers() override;
+    
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
-    virtual void adaptRenderers() override;
 protected:
     Direction _direction;
     float _percent;

@@ -2,6 +2,7 @@
 #include "MainMenuScene.h"
 
 USING_NS_CC;
+//using namespace gaf;
 
 AppDelegate::AppDelegate() {
 

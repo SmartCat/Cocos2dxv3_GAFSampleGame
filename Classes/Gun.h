@@ -3,10 +3,13 @@
 #include "GAFDelegates.h"
 #include "cocos2d.h"
 
-class GAFAnimatedObject;
-class GAFAsset;
+namespace gaf
+{
+    class GAFAnimatedObject;
+    class GAFAsset;
+}
 
-class Gun : public cocos2d::Node, public GAFSequenceDelegate
+class Gun : public cocos2d::Node, public gaf::GAFSequenceDelegate
 {
 public:
     Gun();
@@ -16,7 +19,7 @@ public:
 
     void shoot();
     void update(float dt);
-    virtual void onFinishSequence(GAFAnimatedObject * object, const std::string& sequenceName);
+    virtual void onFinishSequence(gaf::GAFAnimatedObject * object, const std::string& sequenceName);
 private:
     void emitProjectile();
     float m_reloadTime = 0;
@@ -25,8 +28,8 @@ private:
     float m_projectileDamage = 1;
     cocos2d::Vec2 m_projectileOffset = cocos2d::Vec2::ZERO;
     cocos2d::Vec2 m_emissionPoint = cocos2d::Vec2::ZERO;
-    GAFAnimatedObject* m_model = nullptr;
-    GAFAsset* m_projectile = nullptr;
+    gaf::GAFAnimatedObject* m_model = nullptr;
+    gaf::GAFAsset* m_projectile = nullptr;
 
     float m_cooldown = 0;
     float m_loadingTime = 0;

@@ -26,24 +26,14 @@ THE SOFTWARE.
 #define __UISCROLLVIEW_H__
 
 #include "ui/UILayout.h"
-#include "ui/UIScrollInterface.h"
 
 NS_CC_BEGIN
 
 class EventFocusListener;
 
 namespace ui {
-    
-class ScrollInnerContainer : public Layout
-{
-public:
-    ScrollInnerContainer();
-    virtual ~ScrollInnerContainer();
-    static ScrollInnerContainer* create();
-    virtual const Size& getLayoutSize() override;
-};
 
-CC_DEPRECATED_ATTRIBUTE typedef enum
+typedef enum
 {
     SCROLLVIEW_EVENT_SCROLL_TO_TOP,
     SCROLLVIEW_EVENT_SCROLL_TO_BOTTOM,
@@ -56,11 +46,11 @@ CC_DEPRECATED_ATTRIBUTE typedef enum
     SCROLLVIEW_EVENT_BOUNCE_RIGHT
 }ScrollviewEventType;
 
-CC_DEPRECATED_ATTRIBUTE typedef void (Ref::*SEL_ScrollViewEvent)(Ref*, ScrollviewEventType);
+typedef void (Ref::*SEL_ScrollViewEvent)(Ref*, ScrollviewEventType);
 #define scrollvieweventselector(_SELECTOR) (SEL_ScrollViewEvent)(&_SELECTOR)
 
 
-class ScrollView : public Layout , public ScrollViewProtocol
+class ScrollView : public Layout
 {
     
     DECLARE_CLASS_GUI_INFO
@@ -87,6 +77,7 @@ public:
         BOUNCE_RIGHT
     };
     typedef std::function<void(Ref*, EventType)> ccScrollViewCallback;
+   
     /**
      * Default constructor
      */
@@ -96,7 +87,6 @@ public:
      * Default destructor
      */
     virtual ~ScrollView();
-    
     /**
      * Allocates and initializes.
      */
@@ -105,18 +95,18 @@ public:
     /**
      * Changes scroll direction of scrollview.
      *
-     * @see SCROLLVIEW_DIR      SCROLLVIEW_DIR_VERTICAL means vertical scroll, SCROLLVIEW_DIR_HORIZONTAL means horizontal scroll
+     * @see Direction      Direction::VERTICAL means vertical scroll, Direction::HORIZONTAL means horizontal scroll
      *
-     * @param SCROLLVIEW_DIR
+     * @param dir
      */
     virtual void setDirection(Direction dir);
     
     /**
      * Gets scroll direction of scrollview.
      *
-     * @see SCROLLVIEW_DIR      SCROLLVIEW_DIR_VERTICAL means vertical scroll, SCROLLVIEW_DIR_HORIZONTAL means horizontal scroll
+     * @see Direction      Direction::VERTICAL means vertical scroll, Direction::HORIZONTAL means horizontal scroll
      *
-     * @return SCROLLVIEW_DIR
+     * @return Direction
      */
     Direction getDirection()const;
     
@@ -261,20 +251,23 @@ public:
      * Add call back function called scrollview event triggered
      */
     CC_DEPRECATED_ATTRIBUTE void addEventListenerScrollView(Ref* target, SEL_ScrollViewEvent selector);
-    void addEventListener(const ccScrollViewCallback& callback);
+    virtual void addEventListener(const ccScrollViewCallback& callback);
     
     //all of these functions are related to innerContainer.
-    virtual void addChild(Node * child) override;
-    virtual void addChild(Node * child, int zOrder) override;
+    virtual void addChild(Node* child)override;
+    virtual void addChild(Node * child, int localZOrder)override;
     virtual void addChild(Node* child, int zOrder, int tag) override;
+    virtual void addChild(Node* child, int zOrder, const std::string &name) override;
+    
     virtual void removeAllChildren() override;
     virtual void removeAllChildrenWithCleanup(bool cleanup) override;
 	virtual void removeChild(Node* child, bool cleaup = true) override;
+    
     virtual Vector<Node*>& getChildren() override;
     virtual const Vector<Node*>& getChildren() const override;
     virtual ssize_t getChildrenCount() const override;
     virtual Node * getChildByTag(int tag) const override;
-    virtual Widget* getChildByName(const std::string& name)const override;
+    virtual Node* getChildByName(const std::string& name)const override;
     
     //handle touch event
     virtual bool onTouchBegan(Touch *touch, Event *unusedEvent) override;
@@ -328,7 +321,7 @@ public:
 
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
-
+    
 protected:
     virtual void initRenderer() override;
     
@@ -365,10 +358,11 @@ protected:
     virtual void endRecordSlidAction();
     
     //ScrollViewProtocol
-    virtual void handlePressLogic(const Vec2 &touchPoint) override;
-    virtual void handleMoveLogic(const Vec2 &touchPoint) override;
-    virtual void handleReleaseLogic(const Vec2 &touchPoint) override;
-    virtual void interceptTouchEvent(Widget::TouchEventType event,Widget* sender,const Vec2 &touchPoint) override;
+    virtual void handlePressLogic(Touch *touch) ;
+    virtual void handleMoveLogic(Touch *touch) ;
+    virtual void handleReleaseLogic(Touch *touch) ;
+    
+    virtual void interceptTouchEvent(Widget::TouchEventType event,Widget* sender,Touch *touch) override;
     
     void recordSlidTime(float dt);
     
@@ -387,11 +381,6 @@ protected:
     Layout* _innerContainer;
     
     Direction _direction;
-
-    Vec2 _touchBeganPoint;
-    Vec2 _touchMovedPoint;
-    Vec2 _touchEndedPoint;
-    Vec2 _touchMovingPoint;
     Vec2 _autoScrollDir;
     
     float _topBoundary;

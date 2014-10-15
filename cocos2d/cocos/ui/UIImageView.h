@@ -61,7 +61,7 @@ public:
      *
      * @param imageFileName   file name of texture.
      *
-     * @param texType    @see UI_TEX_TYPE_LOCAL
+     * @param texType    @see TextureResType
      */
     static ImageView* create(const std::string& imageFileName, TextureResType texType = TextureResType::LOCAL);
     
@@ -71,7 +71,7 @@ public:
      *
      * @param fileName   file name of texture.
      *
-     * @param texType    @see UI_TEX_TYPE_LOCAL
+     * @param texType    @see TextureResType
      */
     void loadTexture(const std::string& fileName,TextureResType texType = TextureResType::LOCAL);
 
@@ -118,15 +118,15 @@ CC_CONSTRUCTOR_ACCESS:
 protected:
     virtual void initRenderer() override;
     virtual void onSizeChanged() override;
-    virtual void updateTextureColor() override;
-    virtual void updateTextureOpacity() override;
-    virtual void updateTextureRGBA() override;
+  
     virtual void updateFlippedX() override;
     virtual void updateFlippedY() override;
+    
+    virtual void adaptRenderers() override;
+    
     void imageTextureScaleChangedWithSize();
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
-    virtual void adaptRenderers() override;
 protected:
     bool _scale9Enabled;
     bool _prevIgnoreSize;

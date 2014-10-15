@@ -32,13 +32,13 @@ NS_CC_BEGIN
 
 namespace ui{
     
-CC_DEPRECATED_ATTRIBUTE typedef enum
+typedef enum
 {
     LISTVIEW_ONSELECTEDITEM_START,
     LISTVIEW_ONSELECTEDITEM_END
 }ListViewEventType;
 
-CC_DEPRECATED_ATTRIBUTE typedef void (Ref::*SEL_ListViewEvent)(Ref*,ListViewEventType);
+typedef void (Ref::*SEL_ListViewEvent)(Ref*,ListViewEventType);
 #define listvieweventselector(_SELECTOR) (SEL_ListViewEvent)(&_SELECTOR)
 
 class ListView : public ScrollView
@@ -163,9 +163,10 @@ public:
     
     virtual void doLayout() override;
     
-    virtual void addChild(Node * child) override;
-    virtual void addChild(Node * child, int zOrder) override;
+    virtual void addChild(Node* child)override;
+    virtual void addChild(Node * child, int localZOrder)override;
     virtual void addChild(Node* child, int zOrder, int tag) override;
+    virtual void addChild(Node* child, int zOrder, const std::string &name) override;
     virtual void removeAllChildren() override;
     virtual void removeAllChildrenWithCleanup(bool cleanup) override;
 	virtual void removeChild(Node* child, bool cleaup = true) override;
@@ -174,13 +175,14 @@ public:
     
     CC_DEPRECATED_ATTRIBUTE void addEventListenerListView(Ref* target, SEL_ListViewEvent selector);
     void addEventListener(const ccListViewCallback& callback);
-    
+    using ScrollView::addEventListener;
+
     /**
      * Changes scroll direction of scrollview.
      *
-     * @see SCROLLVIEW_DIR      SCROLLVIEW_DIR_VERTICAL means vertical scroll, SCROLLVIEW_DIR_HORIZONTAL means horizontal scroll
+     * @see Direction Direction::VERTICAL means vertical scroll, Direction::HORIZONTAL means horizontal scroll
      *
-     * @param SCROLLVIEW_DIR
+     * @param dir, set the list view's scroll direction
      */
     virtual void setDirection(Direction dir) override;
     
@@ -201,13 +203,18 @@ protected:
     virtual void copySpecialProperties(Widget* model) override;
     virtual void copyClonedWidgetChildren(Widget* model) override;
     void selectedItemEvent(TouchEventType event);
-    virtual void interceptTouchEvent(Widget::TouchEventType event,Widget* sender,const Vec2 &touchPoint) override;
+    virtual void interceptTouchEvent(Widget::TouchEventType event,Widget* sender,Touch* touch) override;
 protected:
-    
     Widget* _model;
+    
     Vector<Widget*> _items;
+    
     Gravity _gravity;
+    
     float _itemsMargin;
+    
+    ssize_t _curSelectedIndex;
+    bool _refreshViewDirty;
     
     Ref*       _listViewEventListener;
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
@@ -223,9 +230,6 @@ protected:
 #pragma warning (pop)
 #endif
     ccListViewCallback _eventCallback;
-    
-    ssize_t _curSelectedIndex;
-    bool _refreshViewDirty;
 };
 
 }

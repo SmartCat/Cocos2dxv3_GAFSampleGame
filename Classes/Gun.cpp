@@ -6,6 +6,7 @@
 
 
 USING_NS_CC;
+using namespace gaf;
 
 Gun::Gun()
 {

@@ -5,6 +5,7 @@
 #include "Enemy.h"
 
 USING_NS_CC;
+using namespace gaf;
 
 Projectile::Projectile()
 {}

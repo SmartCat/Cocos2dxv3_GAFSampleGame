@@ -7,14 +7,11 @@
 *.idb
 ipch
 *.suo
-*.lib
-*.dll
 *.exe
 *.xcscheme
 *.xcworkspacedata
 *.xcuserstate
 *.o
-*.a
 *.d
 *.ilk
 *.so
@@ -25,3 +22,7 @@ ipch
 /proj.android/assets
 /proj.win32/Debug.win32
 /proj.win32/Debug
+*.log
+*.lastbuildstate
+*.cache
+*.unsuccessfulbuild

@@ -3,6 +3,7 @@
 #include "GAFAnimatedObject.h"
 
 USING_NS_CC;
+using namespace gaf;
 
 Background::Background()
 {

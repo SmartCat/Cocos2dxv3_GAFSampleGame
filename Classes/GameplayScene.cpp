@@ -11,8 +11,10 @@
 #include "GAFAsset.h"
 
 USING_NS_CC;
+using namespace gaf;
 
 GameplayScene::GameplayScene()
+:m_robots(0)
 {
 
 }
@@ -22,10 +24,10 @@ GameplayScene::~GameplayScene()
     _eventDispatcher->removeCustomEventListeners("enemy_killed");
 }
 
-GameplayScene* GameplayScene::create()
+GameplayScene* GameplayScene::create(int enemies)
 {
     GameplayScene *pRet = new GameplayScene();
-    if (pRet && pRet->init())
+    if (pRet && pRet->init(enemies))
     {
         pRet->autorelease();
         return pRet;
@@ -38,12 +40,14 @@ GameplayScene* GameplayScene::create()
     }
 }
 
-bool GameplayScene::init()
+bool GameplayScene::init(int enemies)
 {
     if (!Scene::initWithPhysics())
     {
         return false;
     }
+    
+    m_robots = enemies;
     
     m_enemyAsset = GAFAsset::create("robot_enemy/robot_enemy.gaf");
     _eventDispatcher->addCustomEventListener("enemy_killed", CC_CALLBACK_1(GameplayScene::onEnemyKilled, this));
@@ -122,7 +126,8 @@ bool GameplayScene::init()
 
         m_level->setScale(levelScale.x, levelScale.y);
         m_level->setPosition(levelPosition);
-        spawnEnemy();
+        for(int i = 0; i < m_robots; ++i)
+            spawnEnemy();
 
         getPhysicsWorld()->setGravity(Vec2(0.0f, 0.0f));
 
@@ -178,9 +183,10 @@ void GameplayScene::spawnEnemy()
 {
     Enemy* e = Enemy::create(m_enemyAsset->createObjectAndRun());
     bool left = rand() % 2;
+    float position = 800 + (rand() % 200);
     if (left)
     {
-        Vec2 pos(m_player->getPositionX() + 900, m_player->getPositionY());
+        Vec2 pos(m_player->getPositionX() + position, m_player->getPositionY());
         pos = m_level->convertToNodeSpace(pos);
         e->setPosition(pos);
         e->walkLeft();
@@ -188,7 +194,7 @@ void GameplayScene::spawnEnemy()
     }
     else
     {
-        Vec2 pos(m_player->getPositionX() - 900, m_player->getPositionY());
+        Vec2 pos(m_player->getPositionX() - position, m_player->getPositionY());
         pos = m_level->convertToNodeSpace(pos);
         e->setPosition(pos);
         e->walkRight();
