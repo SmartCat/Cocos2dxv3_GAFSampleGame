@@ -8,6 +8,7 @@ namespace gaf
 }
 
 class Player;
+class Projectile;
 
 class GameplayScene : public cocos2d::Scene
 {
@@ -16,8 +17,9 @@ public:
     ~GameplayScene();
     virtual bool init(int enemies);
     
-    // Creates with physics
     static GameplayScene* create(int enemies);
+
+    void update(float dt);
 
     void advanceToMenu(cocos2d::Ref* pSender);
 
@@ -27,11 +29,23 @@ public:
     void toggleGunButtonCallback(cocos2d::Ref* pSender);
 
     void spawnEnemy();
+    void addProjectile(Projectile* p);
     void onEnemyKilled(void* data);
 private:
+    void checkCollisionsSimple();
+
     Player* m_player;
     int m_gunId = 0;
     cocos2d::Node* m_level;
     gaf::GAFAsset* m_enemyAsset;
     int m_robots;
+
+    //constants
+    enum CHILD_TAGS
+    {
+        TAG_LEVEL = 1,
+        TAG_PLAYER,
+        TAG_ENEMY,
+        TAG_PROJECTILE
+    };
 };

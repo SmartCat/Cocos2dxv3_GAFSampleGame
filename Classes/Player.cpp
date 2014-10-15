@@ -17,6 +17,11 @@ Player::~Player()
     CC_SAFE_RELEASE(m_gun);
 }
 
+cocos2d::Size Player::getSize() const
+{
+    return m_size;
+}
+
 void Player::setGun(Gun* gun)
 {
 
@@ -61,6 +66,8 @@ void Player::update(float dt)
     Vec3 scale, pos; Quaternion rot;
     getNodeToWorldTransform().decompose(&scale, &rot, &pos);
 
+    m_size = Size(rect.size.width * scale.x, rect.size.height * scale.y);
+
     do
     {
         Node* level = Director::getInstance()->getRunningScene()->getChildByTag(1);
@@ -84,14 +91,6 @@ void Player::update(float dt)
         level->setPosition(position);
 
     } while (0);
-
-    Size boxSize(rect.size.width * scale.x, rect.size.height * scale.y);
-    Vec2 boxPos(rect.origin.x * scale.x + boxSize.width / 2, rect.origin.y * scale.y + boxSize.height / 2);
-    auto body = PhysicsBody::createBox(boxSize, PHYSICSBODY_MATERIAL_DEFAULT);
-    body->setPositionOffset(boxPos);
-    setPhysicsBody(body);
-    body->setContactTestBitmask(0x2);
-
 }
 
 void Player::shoot()

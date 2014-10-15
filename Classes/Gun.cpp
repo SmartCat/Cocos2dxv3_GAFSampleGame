@@ -3,6 +3,7 @@
 #include "GAFAnimatedObject.h"
 #include "GAFAsset.h"
 #include "Projectile.h"
+#include "GameplayScene.h"
 
 
 USING_NS_CC;
@@ -61,7 +62,8 @@ void Gun::emitProjectile()
     Projectile* p = Projectile::create(model, m_projectileDamage, m_projectileSpeed, container);
     removeChild(container);
 
-    Director::getInstance()->getRunningScene()->addChild(p);
+    GameplayScene* scene = static_cast<GameplayScene*>(Director::getInstance()->getRunningScene());
+    scene->addProjectile(p);
 }
 
 void Gun::onFinishSequence(GAFAnimatedObject * object, const std::string& sequenceName)

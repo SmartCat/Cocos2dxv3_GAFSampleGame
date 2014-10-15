@@ -15,9 +15,10 @@ public:
     virtual bool init(gaf::GAFAnimatedObject* model, float damage, float velocity, cocos2d::Node* parent);
     static Projectile* create(gaf::GAFAnimatedObject* model, float damage, float velocity, cocos2d::Node* parent);
 
-    bool onCollided(cocos2d::PhysicsContact& contact);
     void destroy();
     void update(float dt);
+
+    const float getDamage() const;
 private:
     float m_damage = 0;
     cocos2d::Vec2  m_velocity = cocos2d::Vec2::ZERO;
