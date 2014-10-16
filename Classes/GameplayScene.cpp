@@ -9,9 +9,11 @@
 #include "Enemy.h"
 #include "Background.h"
 #include "GAFAsset.h"
+#include <Projectile.h>
 
 USING_NS_CC;
 using namespace gaf;
+typedef cocos2d::Vector<cocos2d::Node*> Nodes_t;
 
 GameplayScene::GameplayScene()
 :m_robots(0)
@@ -40,13 +42,13 @@ GameplayScene* GameplayScene::create(int enemies)
     }
 }
 
-bool GameplayScene::init(int enemies)
+void GameplayScene::update(float dt)
 {
-    if (!Scene::initWithPhysics())
-    {
-        return false;
-    }
-    
+    checkCollisionsSimple();
+}
+
+bool GameplayScene::init(int enemies)
+{    
     m_robots = enemies;
     
     m_enemyAsset = GAFAsset::create("robot_enemy/robot_enemy.gaf");
@@ -112,7 +114,7 @@ bool GameplayScene::init(int enemies)
         Vec2 levelPosition(250, 200);
 
         m_level = Node::create();
-        addChild(m_level, 1, 1);
+        addChild(m_level, 1, TAG_LEVEL);
 
 		Background* bg = Background::create();
 		addChild(bg);
@@ -122,17 +124,15 @@ bool GameplayScene::init(int enemies)
         m_player->setGun(gun);
         m_player->setPosition(levelPosition);
         m_player->setScale(levelScale.x, levelScale.y);
-        addChild(m_player, 1, 2);
+        addChild(m_player, 1, TAG_PLAYER);
 
         m_level->setScale(levelScale.x, levelScale.y);
         m_level->setPosition(levelPosition);
         for(int i = 0; i < m_robots; ++i)
             spawnEnemy();
-
-        getPhysicsWorld()->setGravity(Vec2(0.0f, 0.0f));
-
-        //getPhysicsWorld()->setDebugDrawMask(0xFF);
     }
+
+    Director::getInstance()->getScheduler()->scheduleUpdate(this, 1, false);
 	
 	glClearColor(0, 0, 0, 1.0);
 	
@@ -179,6 +179,65 @@ void GameplayScene::onEnemyKilled(void*)
     spawnEnemy();
 }
 
+void GameplayScene::checkCollisionsSimple()
+{
+    Nodes_t nodes = m_level->getChildren();
+
+    const double playerHalfWidth = m_player->getSize().width / 2;
+    
+    for (Nodes_t::iterator it = nodes.begin(); it != nodes.end(); ++it)
+    {
+        if ((*it)->getTag() == TAG_ENEMY)
+        {
+            Enemy *e = reinterpret_cast<Enemy*>(*it);
+            if (e->isDying())
+            {
+                continue;
+            }
+
+            const double enemyHalfWidth = e->getSize().width / 2;
+            const double distCollisionPlayerEnemy = playerHalfWidth + enemyHalfWidth;
+            const double distCollisionProjectileEnemy = enemyHalfWidth;
+
+            const double enemyX = m_level->convertToWorldSpace(e->getPosition()).x;
+            
+            double distToPlayer = fabs(m_player->getPositionX() + playerHalfWidth - enemyX - enemyHalfWidth);
+            if (distToPlayer <= distCollisionPlayerEnemy)
+            {
+                e->die();
+            }
+            
+            float damage = checkForProjectilesDamage(enemyX, distCollisionProjectileEnemy);
+            if (damage > 0.f && !e->isDying())
+            {
+                e->damage(damage);
+            }
+        }
+    }
+}
+
+float GameplayScene::checkForProjectilesDamage(const float enemyX, const float epsDistance)
+{
+    Nodes_t nodes = getChildren();
+
+    for (Nodes_t::iterator it = nodes.begin(); it != nodes.end(); ++it)
+    {
+        if ((*it)->getTag() == TAG_PROJECTILE)
+        {
+            Projectile *p = reinterpret_cast<Projectile*>(*it);
+
+            double distToProjectile = fabs(p->getPositionX() - enemyX);
+            if (distToProjectile <= epsDistance)
+            {
+                p->destroy();
+                return p->getDamage();
+            }
+        }
+    }
+
+    return 0.f;
+}
+
 void GameplayScene::spawnEnemy()
 {
     Enemy* e = Enemy::create(m_enemyAsset->createObjectAndRun());
@@ -190,7 +249,6 @@ void GameplayScene::spawnEnemy()
         pos = m_level->convertToNodeSpace(pos);
         e->setPosition(pos);
         e->walkLeft();
-        m_level->addChild(e);
     }
     else
     {
@@ -198,8 +256,13 @@ void GameplayScene::spawnEnemy()
         pos = m_level->convertToNodeSpace(pos);
         e->setPosition(pos);
         e->walkRight();
-        m_level->addChild(e);
     }
+    m_level->addChild(e, 1, TAG_ENEMY);
+}
+
+void GameplayScene::addProjectile(Projectile* p)
+{
+    addChild(p, 1, TAG_PROJECTILE);
 }
 
 void GameplayScene::toggleGunButtonCallback(cocos2d::Ref* pSender)

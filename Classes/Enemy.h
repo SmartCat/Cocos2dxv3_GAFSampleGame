@@ -26,6 +26,8 @@ public:
     
     static Enemy* create(gaf::GAFAnimatedObject* model);
 
+    cocos2d::Size getSize() const;
+
     void update(float dt);
     void damage(float);
 
@@ -33,14 +35,14 @@ public:
     void walkRight();
 
     void die();
+    bool isDying() const;
     void onDieAnimationFinished();
 
     virtual void onFinishSequence(gaf::GAFAnimatedObject * object, const std::string& sequenceName) override;
-
-    bool onCollided(cocos2d::PhysicsContact& contact);
 private:
     EState m_state = ENone;
     gaf::GAFAnimatedObject* m_model = nullptr;
+    cocos2d::Size m_size;
     float m_speed = 400;
     float m_health = 2;
     bool m_readyForCleanup = false;

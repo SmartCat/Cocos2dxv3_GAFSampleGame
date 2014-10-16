@@ -28,6 +28,11 @@ Enemy* Enemy::create(GAFAnimatedObject* model)
     return nullptr;
 }
 
+cocos2d::Size Enemy::getSize() const
+{
+    return m_size;
+}
+
 bool Enemy::init(GAFAnimatedObject* model)
 {
     bool ret = true;
@@ -42,15 +47,12 @@ bool Enemy::init(GAFAnimatedObject* model)
         m_model->pause();
         addChild(m_model);
         m_model->retain();
-        Size screen = Director::getInstance()->getVisibleSize();
         m_model->setPosition(100, 500);
         m_model->setScale(1);
+
+        m_size = m_model->realBoundingBoxForCurrentFrame().size;
+
         walkLeft();
-
-
-        auto contactListener = EventListenerPhysicsContact::create();
-        contactListener->onContactBegin = CC_CALLBACK_1(Enemy::onCollided, this);
-        _eventDispatcher->addEventListenerWithFixedPriority(contactListener, 1);
     }
     return ret;
 }
@@ -90,13 +92,7 @@ void Enemy::update(float dt)
     Vec3 scale, pos; Quaternion rot;
     getNodeToWorldTransform().decompose(&scale, &rot, &pos);
 
-    Size boxSize(rect.size.width * scale.x, rect.size.height * scale.y);
-    Vec2 boxPos(rect.origin.x * scale.x + boxSize.width / 2, rect.origin.y * scale.y + boxSize.height / 2);
-
-    auto body = PhysicsBody::createBox(boxSize, PHYSICSBODY_MATERIAL_DEFAULT);
-    body->setPositionOffset(boxPos);
-    setPhysicsBody(body);
-    body->setContactTestBitmask(0x2);
+    m_size = Size(rect.size.width * scale.x, rect.size.height * scale.y);
 
 }
 
@@ -111,7 +107,6 @@ void Enemy::damage(float value)
 
 void Enemy::die()
 {
-    setPhysicsBody(nullptr);
     m_model->setSequenceDelegate(this);
     if (m_state == EWalkLeft)
     {
@@ -123,6 +118,11 @@ void Enemy::die()
         m_state = EDieRight;
         m_model->playSequence("die_right", false);
     }
+}
+
+bool Enemy::isDying() const
+{
+    return m_state == EDieLeft || m_state == EDieRight;
 }
 
 void Enemy::onDieAnimationFinished()
@@ -151,30 +151,6 @@ void Enemy::walkRight()
 
     m_model->playSequence("walk_right", true);
     m_state = EWalkRight;
-}
-
-bool Enemy::onCollided(PhysicsContact& contact)
-{
-    if (getPhysicsBody() == nullptr)
-        return false;
-
-    if (contact.getShapeA()->getBody() == getPhysicsBody() || contact.getShapeB()->getBody() == getPhysicsBody())
-    {
-        Player* p = dynamic_cast<Player*>(contact.getShapeA()->getBody()->getNode());
-        if (p)
-        {
-            die();
-            return true;
-        }
-        p = dynamic_cast<Player*>(contact.getShapeB()->getBody()->getNode());
-        if (p)
-        {
-            die();
-            return true;
-        }
-        return true;
-    }
-    return false;
 }
 
 void Enemy::onFinishSequence(GAFAnimatedObject * object, const std::string& sequenceName)

@@ -26,6 +26,8 @@ public:
     
     CREATE_FUNC(Player);
 
+    cocos2d::Size getSize() const;
+
     void setGun(Gun* gun);
 
     void update(float dt);
@@ -38,5 +40,6 @@ private:
     EState m_state = ENone;
     Gun*   m_gun = nullptr;
     gaf::GAFAnimatedObject* m_model = nullptr;
+    cocos2d::Size m_size;
     float m_speed = 350;
 };
