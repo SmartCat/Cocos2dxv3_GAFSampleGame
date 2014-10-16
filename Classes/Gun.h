@@ -1,12 +1,12 @@
-#pragma once 
+#pragma once
 #include "GAFPrecompiled.h"
 #include "GAFDelegates.h"
 #include "cocos2d.h"
 
 namespace gaf
 {
-    class GAFAnimatedObject;
-    class GAFAsset;
+class GAFAnimatedObject;
+class GAFAsset;
 }
 
 class Gun : public cocos2d::Node, public gaf::GAFSequenceDelegate

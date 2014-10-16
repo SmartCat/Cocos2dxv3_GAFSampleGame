@@ -86,10 +86,12 @@ void Enemy::update(float dt)
             break;
         }
         setPosition(newPos);
-    } while (0);
+    }
+    while (0);
 
     Rect rect = m_model->realBoundingBoxForCurrentFrame();
-    Vec3 scale, pos; Quaternion rot;
+    Vec3 scale, pos;
+    Quaternion rot;
     getNodeToWorldTransform().decompose(&scale, &rot, &pos);
 
     m_size = Size(rect.size.width * scale.x, rect.size.height * scale.y);

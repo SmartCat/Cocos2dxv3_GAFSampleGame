@@ -19,7 +19,7 @@ bool Projectile::init(GAFAnimatedObject* model, float damage, float velocity, No
 {
     retain();
     m_damage = damage;
-    
+
     cocos2d::Director::getInstance()->getScheduler()->scheduleUpdate(this, 1, false);
 
     model->setFrame(0);
@@ -31,7 +31,7 @@ bool Projectile::init(GAFAnimatedObject* model, float damage, float velocity, No
     Rect rect = model->realBoundingBoxForCurrentFrame();
     Size boxSize(rect.size.width * scale.x, rect.size.height * scale.y);
     Vec2 boxPos(rect.origin.x * scale.x + boxSize.width / 2, rect.origin.y * scale.y + boxSize.height / 2);
-    
+
     rotation.normalize();
     float angle = 2.0f * acos(rotation.w);
 

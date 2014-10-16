@@ -55,7 +55,7 @@ bool Player::init()
         m_model->retain();
         m_model->setPosition(100, 500);
         m_model->setScale(1);
-        stop();        
+        stop();
     }
     return ret;
 }
@@ -63,7 +63,8 @@ bool Player::init()
 void Player::update(float dt)
 {
     Rect rect = m_model->realBoundingBoxForCurrentFrame();
-    Vec3 scale, pos; Quaternion rot;
+    Vec3 scale, pos;
+    Quaternion rot;
     getNodeToWorldTransform().decompose(&scale, &rot, &pos);
 
     m_size = Size(rect.size.width * scale.x, rect.size.height * scale.y);
@@ -90,7 +91,8 @@ void Player::update(float dt)
         }
         level->setPosition(position);
 
-    } while (0);
+    }
+    while (0);
 }
 
 void Player::shoot()

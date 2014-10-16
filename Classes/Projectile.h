@@ -1,10 +1,10 @@
-#pragma once 
+#pragma once
 
 #include "cocos2d.h"
 
 namespace gaf
 {
-    class GAFAnimatedObject;
+class GAFAnimatedObject;
 }
 
 class Projectile : public cocos2d::Node

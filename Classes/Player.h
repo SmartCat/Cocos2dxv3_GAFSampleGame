@@ -1,10 +1,10 @@
-#pragma once 
+#pragma once
 
 #include "cocos2d.h"
 
 namespace gaf
 {
-    class GAFAnimatedObject;
+class GAFAnimatedObject;
 }
 class Gun;
 
@@ -22,8 +22,8 @@ class Player : public cocos2d::Node
 public:
     Player();
     virtual ~Player();
-    virtual bool init();  
-    
+    virtual bool init();
+
     CREATE_FUNC(Player);
 
     cocos2d::Size getSize() const;

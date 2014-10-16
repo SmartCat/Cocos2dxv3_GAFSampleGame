@@ -1,11 +1,11 @@
-#pragma once 
+#pragma once
 
 #include "cocos2d.h"
 #include "GAFDelegates.h"
 
 namespace gaf
 {
-    class GAFAnimatedObject;
+class GAFAnimatedObject;
 }
 
 class Enemy : public cocos2d::Node, public gaf::GAFSequenceDelegate
@@ -23,7 +23,7 @@ public:
     Enemy();
     virtual ~Enemy();
     virtual bool init(gaf::GAFAnimatedObject* model);
-    
+
     static Enemy* create(gaf::GAFAnimatedObject* model);
 
     cocos2d::Size getSize() const;

@@ -16,7 +16,7 @@ using namespace gaf;
 typedef cocos2d::Vector<cocos2d::Node*> Nodes_t;
 
 GameplayScene::GameplayScene()
-:m_robots(0)
+    :m_robots(0)
 {
 
 }
@@ -48,14 +48,14 @@ void GameplayScene::update(float dt)
 }
 
 bool GameplayScene::init(int enemies)
-{    
+{
     m_robots = enemies;
-    
+
     m_enemyAsset = GAFAsset::create("robot_enemy/robot_enemy.gaf");
     _eventDispatcher->addCustomEventListener("enemy_killed", CC_CALLBACK_1(GameplayScene::onEnemyKilled, this));
 
     Size visibleSize = Director::getInstance()->getVisibleSize();
-    
+
     {
         Label* text = Label::create("Menu", "Courier.ttf", 35);
         text->setColor(Color3B(255, 255, 255));
@@ -69,19 +69,19 @@ bool GameplayScene::init(int enemies)
     {
 
         MenuItem* leftButton = DoubleTriggerMenuItemSprite::create(
-            Sprite::create("right_idle.png"),
-            Sprite::create("right_selected.png"),
-            nullptr,
-            CC_CALLBACK_1(GameplayScene::leftButtonCallback, this, false),
-            CC_CALLBACK_1(GameplayScene::leftButtonCallback, this, true));
+                                   Sprite::create("right_idle.png"),
+                                   Sprite::create("right_selected.png"),
+                                   nullptr,
+                                   CC_CALLBACK_1(GameplayScene::leftButtonCallback, this, false),
+                                   CC_CALLBACK_1(GameplayScene::leftButtonCallback, this, true));
 
 
         MenuItem* rightButton = DoubleTriggerMenuItemSprite::create(
-            Sprite::create("right_idle.png"),
-            Sprite::create("right_selected.png"),
-            nullptr,
-            CC_CALLBACK_1(GameplayScene::rightButtonCallback, this, false),
-            CC_CALLBACK_1(GameplayScene::rightButtonCallback, this, true));
+                                    Sprite::create("right_idle.png"),
+                                    Sprite::create("right_selected.png"),
+                                    nullptr,
+                                    CC_CALLBACK_1(GameplayScene::rightButtonCallback, this, false),
+                                    CC_CALLBACK_1(GameplayScene::rightButtonCallback, this, true));
 
         leftButton->setScaleX(-1);
         rightButton->setPosition(Size(leftButton->getContentSize().width + 40, 0));
@@ -92,14 +92,14 @@ bool GameplayScene::init(int enemies)
 
     {
         MenuItem* toggleGunButton = MenuItemSprite::create(
-            Sprite::create("gun_idle.png"),
-            Sprite::create("gun_pressed.png"),
-            CC_CALLBACK_1(GameplayScene::toggleGunButtonCallback, this));
+                                        Sprite::create("gun_idle.png"),
+                                        Sprite::create("gun_pressed.png"),
+                                        CC_CALLBACK_1(GameplayScene::toggleGunButtonCallback, this));
 
         MenuItem* fireButton = MenuItemSprite::create(
-            Sprite::create("fire_idle.png"),
-            Sprite::create("fire_selected.png"),
-            CC_CALLBACK_1(GameplayScene::fireButtonCallback, this));
+                                   Sprite::create("fire_idle.png"),
+                                   Sprite::create("fire_selected.png"),
+                                   CC_CALLBACK_1(GameplayScene::fireButtonCallback, this));
 
         toggleGunButton->setPosition(Size(- toggleGunButton->getContentSize().width - fireButton->getContentSize().width - 40, fireButton->getContentSize().height));
 
@@ -116,8 +116,8 @@ bool GameplayScene::init(int enemies)
         m_level = Node::create();
         addChild(m_level, 1, TAG_LEVEL);
 
-		Background* bg = Background::create();
-		addChild(bg);
+        Background* bg = Background::create();
+        addChild(bg);
 
         m_player = Player::create();
         Gun* gun = Gun::create("gun_1.plist");
@@ -133,9 +133,9 @@ bool GameplayScene::init(int enemies)
     }
 
     Director::getInstance()->getScheduler()->scheduleUpdate(this, 1, false);
-	
-	glClearColor(0, 0, 0, 1.0);
-	
+
+    glClearColor(0, 0, 0, 1.0);
+
     return true;
 }
 
@@ -184,7 +184,7 @@ void GameplayScene::checkCollisionsSimple()
     Nodes_t nodes = m_level->getChildren();
 
     const double playerHalfWidth = m_player->getSize().width / 2;
-    
+
     for (Nodes_t::iterator it = nodes.begin(); it != nodes.end(); ++it)
     {
         if ((*it)->getTag() == TAG_ENEMY)
@@ -200,13 +200,13 @@ void GameplayScene::checkCollisionsSimple()
             const double distCollisionProjectileEnemy = enemyHalfWidth;
 
             const double enemyX = m_level->convertToWorldSpace(e->getPosition()).x;
-            
+
             double distToPlayer = fabs(m_player->getPositionX() + playerHalfWidth - enemyX - enemyHalfWidth);
             if (distToPlayer <= distCollisionPlayerEnemy)
             {
                 e->die();
             }
-            
+
             float damage = checkForProjectilesDamage(enemyX, distCollisionProjectileEnemy);
             if (damage > 0.f && !e->isDying())
             {

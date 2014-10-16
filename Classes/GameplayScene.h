@@ -1,10 +1,10 @@
-#pragma once 
+#pragma once
 
 #include "cocos2d.h"
 
 namespace gaf
 {
-    class GAFAsset;
+class GAFAsset;
 }
 
 class Player;
@@ -16,7 +16,7 @@ public:
     GameplayScene();
     ~GameplayScene();
     virtual bool init(int enemies);
-    
+
     static GameplayScene* create(int enemies);
 
     void update(float dt);
