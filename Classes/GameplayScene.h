@@ -22,6 +22,7 @@ public:
     void update(float dt);
 
     void advanceToMenu(cocos2d::Ref* pSender);
+    void showAtlases(cocos2d::Ref* pSender);
 
     void fireButtonCallback(cocos2d::Ref* pSender);
     void leftButtonCallback(cocos2d::Ref* pSender, bool pressed);

@@ -4,7 +4,7 @@
 #include "GAFAnimatedObject.h"
 
 USING_NS_CC;
-using namespace gaf;
+USING_NS_GAF;
 
 MainMenuScene::MainMenuScene()
 :m_enemies(1)

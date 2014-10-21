@@ -9,10 +9,11 @@
 #include "Enemy.h"
 #include "Background.h"
 #include "GAFAsset.h"
-#include <Projectile.h>
+#include "Projectile.h"
+#include "AtlasesScene.h"
 
 USING_NS_CC;
-using namespace gaf;
+USING_NS_GAF;
 typedef cocos2d::Vector<cocos2d::Node*> Nodes_t;
 
 GameplayScene::GameplayScene()
@@ -61,6 +62,17 @@ bool GameplayScene::init(int enemies)
         text->setColor(Color3B(255, 255, 255));
         MenuItem* menuButton = MenuItemLabel::create(text, CC_CALLBACK_1(GameplayScene::advanceToMenu, this));
         menuButton->setPosition(visibleSize - menuButton->getContentSize());
+        Menu* menu = Menu::create(menuButton, NULL);
+        menu->setPosition(Vec2::ZERO);
+        addChild(menu, 1);
+    }
+
+    {
+        Label* text = Label::create("Atlases", "Courier.ttf", 24);
+        text->setColor(Color3B(160, 255, 160));
+        MenuItem* menuButton = MenuItemLabel::create(text, CC_CALLBACK_1(GameplayScene::showAtlases, this));
+        cocos2d::Vec2 pos = visibleSize - menuButton->getContentSize();
+        menuButton->setPosition(Vec2(menuButton->getContentSize().width, visibleSize.height - menuButton->getContentSize().height));
         Menu* menu = Menu::create(menuButton, NULL);
         menu->setPosition(Vec2::ZERO);
         addChild(menu, 1);
@@ -143,6 +155,12 @@ void GameplayScene::advanceToMenu(cocos2d::Ref* pSender)
 {
     auto* scene = MainMenuScene::create();
     Director::getInstance()->replaceScene(scene);
+}
+
+void GameplayScene::showAtlases(cocos2d::Ref* pSender)
+{
+    auto* scene = AtlasesScene::create();
+    Director::getInstance()->pushScene(scene);
 }
 
 void GameplayScene::fireButtonCallback(cocos2d::Ref* pSender)

@@ -1,6 +1,7 @@
 #pragma once 
 
 #include "cocos2d.h"
+#include "GAF.h"
 #include "GAFDelegates.h"
 
 namespace gaf
