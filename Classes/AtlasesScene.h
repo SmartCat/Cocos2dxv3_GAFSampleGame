@@ -12,14 +12,16 @@ public:
     
     CREATE_FUNC(AtlasesScene);
 
-    void advanceToGame(cocos2d::Ref* pSender);
+    void advanceToGame(Ref* pSender);
 
-    void leftButtonCallback(cocos2d::Ref* pSender);
-    void rightButtonCallback(cocos2d::Ref* pSender);
+    void leftButtonCallback(Ref* pSender);
+    void rightButtonCallback(Ref* pSender);
     
 private:
+    void reloadSprite();
+
     cocos2d::Label* m_label;
-    cocos2d::Image* m_currentAtlas;
+    cocos2d::Sprite* m_currentAtlas;
 
     typedef std::vector<std::string> AssetsNames_t;
     AssetsNames_t m_assetsToLoad;
