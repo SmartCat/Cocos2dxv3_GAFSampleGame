@@ -7,7 +7,7 @@ namespace gaf
     class GAFAnimatedObject;
 }
 
-class SpeechBubble : public cocos2d::Node
+class SpeechBubble : public cocos2d::Layer
 {
     
 public:
@@ -29,6 +29,9 @@ public:
     void onWeaponSwitched(void* data);
     void onEnemyKilled(void* data);
 
+    virtual bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+    virtual void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
+
     SpeechBubble();
     virtual ~SpeechBubble();
     virtual bool init();  
@@ -39,6 +42,9 @@ public:
 
 private:
     void checkState(InfoState state);
+
+    void showBubble();
+    void hideBubble();
 
     void setFrame(uint16_t frame);
     bool isTimerDisabled() const;

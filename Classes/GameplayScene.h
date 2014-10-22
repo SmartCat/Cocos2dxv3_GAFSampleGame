@@ -37,6 +37,8 @@ private:
     void checkCollisionsSimple();
     float checkForProjectilesDamage(const float enemyX, const float epsDistance);
 
+    bool m_isFirstUpdate;
+
     Player* m_player;
     int m_gunId = 0;
     cocos2d::Node* m_level;

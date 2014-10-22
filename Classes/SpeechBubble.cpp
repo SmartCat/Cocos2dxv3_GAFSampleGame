@@ -48,6 +48,16 @@ void SpeechBubble::onEnemyKilled(void* data)
     checkState(IS_EnemyKilled);
 }
 
+bool SpeechBubble::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
+{
+    return true;
+}
+
+void SpeechBubble::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
+{
+    hideBubble();
+}
+
 SpeechBubble::SpeechBubble()
 : m_awaitingForStep(IS_GameStarted)
 , m_countdown(-1.f)
@@ -68,16 +78,29 @@ bool SpeechBubble::init()
 {
     bool ret = true;
     {
+        Size visibleSize = Director::getInstance()->getVisibleSize();
+
         m_model = GAFAnimatedObject::create(GAFAsset::create("speech_bubble/speech_bubble.gaf"));
         m_model->pause();
+        Vec2 deltaAncor;
+        deltaAncor.x = m_model->getAnchorPointInPoints().x;
+        deltaAncor.y = 100 - m_model->getAnchorPointInPoints().y; // TODO: hardcoded y coord
+        m_model->setPosition(Vec2(visibleSize.width / 2, visibleSize.height) - deltaAncor);
         addChild(m_model);
         m_model->retain();      
     }
 
+    Director::getInstance()->getScheduler()->scheduleUpdateForTarget(this, 1, false);
     _eventDispatcher->addCustomEventListener(getEventName(IS_GameStarted), CC_CALLBACK_1(SpeechBubble::onGameStarted, this));
     _eventDispatcher->addCustomEventListener(getEventName(IS_PlayerMoved), CC_CALLBACK_1(SpeechBubble::onPlayerMoved, this));
     _eventDispatcher->addCustomEventListener(getEventName(IS_WeaponSwitched), CC_CALLBACK_1(SpeechBubble::onWeaponSwitched, this));
     _eventDispatcher->addCustomEventListener(getEventName(IS_EnemyKilled), CC_CALLBACK_1(SpeechBubble::onEnemyKilled, this));
+
+    auto touchListener = EventListenerTouchOneByOne::create();
+    touchListener->setSwallowTouches(true);
+    touchListener->onTouchBegan = CC_CALLBACK_2(SpeechBubble::onTouchBegan, this);
+    touchListener->onTouchEnded = CC_CALLBACK_2(SpeechBubble::onTouchEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     return ret;
 }
@@ -89,7 +112,7 @@ void SpeechBubble::update(float dt)
         m_countdown -= dt;
         if (isTimerDisabled())
         {
-            setFrame(m_awaitingForStep);
+            showBubble();
         }
     }
 }
@@ -107,6 +130,19 @@ void SpeechBubble::checkState(InfoState state)
     }
 }
 
+void SpeechBubble::showBubble()
+{
+    setFrame(m_awaitingForStep);
+    setVisible(true);
+}
+
+void SpeechBubble::hideBubble()
+{
+    setVisible(false);
+
+    m_awaitingForStep = static_cast<InfoState>(static_cast<int>(m_awaitingForStep)+1);
+}
+
 void SpeechBubble::setFrame(uint16_t frame)
 {
     m_model->gotoAndStop(frame);
@@ -114,5 +150,5 @@ void SpeechBubble::setFrame(uint16_t frame)
 
 bool SpeechBubble::isTimerDisabled() const
 {
-    return m_countdown <= 1e-8;
+    return m_countdown <= 0.f;
 }

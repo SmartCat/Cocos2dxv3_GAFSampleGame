@@ -18,7 +18,8 @@ USING_NS_GAF;
 typedef cocos2d::Vector<cocos2d::Node*> Nodes_t;
 
 GameplayScene::GameplayScene()
-:m_robots(0)
+: m_robots(0)
+, m_isFirstUpdate(true)
 {
 
 }
@@ -46,6 +47,12 @@ GameplayScene* GameplayScene::create(int enemies)
 
 void GameplayScene::update(float dt)
 {
+    if (m_isFirstUpdate)
+    {
+        m_isFirstUpdate = false;
+        _eventDispatcher->dispatchCustomEvent(SpeechBubble::getEventName(SpeechBubble::IS_GameStarted));
+    }
+
     checkCollisionsSimple();
 }
 
@@ -123,7 +130,6 @@ bool GameplayScene::init(int enemies)
 
     {
         m_speechBubble = SpeechBubble::create();
-        m_speechBubble->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - m_speechBubble->getContentSize().height));
         addChild(m_speechBubble, 1);
         m_speechBubble->setVisible(false);
     }
@@ -154,7 +160,7 @@ bool GameplayScene::init(int enemies)
     Director::getInstance()->getScheduler()->scheduleUpdate(this, 1, false);
 	
 	glClearColor(0, 0, 0, 1.0);
-	
+
     return true;
 }
 
@@ -180,6 +186,7 @@ void GameplayScene::leftButtonCallback(cocos2d::Ref* pSender, bool pressed)
     if (pressed)
     {
         m_player->walkLeft();
+        _eventDispatcher->dispatchCustomEvent(SpeechBubble::getEventName(SpeechBubble::IS_PlayerMoved));
     }
     else
     {
@@ -192,6 +199,7 @@ void GameplayScene::rightButtonCallback(cocos2d::Ref* pSender, bool pressed)
     if (pressed)
     {
         m_player->walkRight();
+        _eventDispatcher->dispatchCustomEvent(SpeechBubble::getEventName(SpeechBubble::IS_PlayerMoved));
     }
     else
     {
@@ -236,6 +244,7 @@ void GameplayScene::checkCollisionsSimple()
             if (damage > 0.f && !e->isDying())
             {
                 e->damage(damage);
+                _eventDispatcher->dispatchCustomEvent(SpeechBubble::getEventName(SpeechBubble::IS_EnemyKilled));
             }
         }
     }
@@ -292,6 +301,8 @@ void GameplayScene::addProjectile(Projectile* p)
 
 void GameplayScene::toggleGunButtonCallback(cocos2d::Ref* pSender)
 {
+    _eventDispatcher->dispatchCustomEvent(SpeechBubble::getEventName(SpeechBubble::IS_WeaponSwitched));
+
     int GUNS = 2;
 
     m_gunId += 1;
