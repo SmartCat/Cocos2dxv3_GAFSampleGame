@@ -35,16 +35,20 @@ public:
     void walkLeft();
     void walkRight();
 
+    void setMoving(bool moving);
+
     void die();
     bool isDying() const;
     void onDieAnimationFinished();
 
     virtual void onFinishSequence(gaf::GAFAnimatedObject * object, const std::string& sequenceName) override;
 private:
+    const static float k_speed;
+
     EState m_state = ENone;
     gaf::GAFAnimatedObject* m_model = nullptr;
     cocos2d::Size m_size;
-    float m_speed = 400;
+    float m_speed;
     float m_health = 2;
     bool m_readyForCleanup = false;
 };

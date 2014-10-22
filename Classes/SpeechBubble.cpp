@@ -1,4 +1,5 @@
 #include "SpeechBubble.h"
+#include "GameplayScene.h"
 #include "GAFPrecompiled.h"
 #include "GAF.h"
 
@@ -48,12 +49,28 @@ void SpeechBubble::onEnemyKilled(void* data)
     checkState(IS_EnemyKilled);
 }
 
-bool SpeechBubble::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
+bool SpeechBubble::onTouchBegan(Touch* touch, Event* event)
 {
-    return true;
+    if (!isVisible())
+    {
+        return false;
+    }
+
+    Vec2 touchLocation = touch->getLocation();
+    Vec2 local = m_model->convertToNodeSpace(touchLocation); // TODO: correct touches checking
+    local.y = -local.y;
+    Rect r = m_model->realBoundingBoxForCurrentFrame();
+    r.origin = Vec2::ZERO;
+
+    if (r.containsPoint(local))
+    {
+        return true;
+    }
+
+    return false;
 }
 
-void SpeechBubble::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
+void SpeechBubble::onTouchEnded(Touch* touch, Event* event)
 {
     hideBubble();
 }
@@ -134,6 +151,17 @@ void SpeechBubble::showBubble()
 {
     setFrame(m_awaitingForStep);
     setVisible(true);
+
+    GameplayScene *scene = static_cast<GameplayScene*>(Director::getInstance()->getRunningScene());
+    if (m_awaitingForStep == IS_GameStarted || m_awaitingForStep == IS_WeaponSwitched)
+    {
+        scene->disableHud();
+    }
+
+    if (m_awaitingForStep == IS_WeaponSwitched)
+    {
+        scene->enableWeaponSwitch();
+    }
 }
 
 void SpeechBubble::hideBubble()
@@ -141,6 +169,8 @@ void SpeechBubble::hideBubble()
     setVisible(false);
 
     m_awaitingForStep = static_cast<InfoState>(static_cast<int>(m_awaitingForStep)+1);
+    GameplayScene *scene = static_cast<GameplayScene*>(Director::getInstance()->getRunningScene());
+    scene->enableAll();
 }
 
 void SpeechBubble::setFrame(uint16_t frame)

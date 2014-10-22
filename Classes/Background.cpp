@@ -76,7 +76,7 @@ void Background::repositionTilesStartingFrom(float startX)
 	for (it = m_tiles.begin(); it != m_tiles.end(); it++)
 	{
 		(*it)->setPosition(totalSize + startX, visibleSize.height);
-		totalSize += m_tileWidth - 1.0f;
+		totalSize += m_tileWidth - 0.5f;
         
 	}
 }

@@ -70,9 +70,9 @@ bool GameplayScene::init(int enemies)
         text->setColor(Color3B(255, 255, 255));
         MenuItem* menuButton = MenuItemLabel::create(text, CC_CALLBACK_1(GameplayScene::advanceToMenu, this));
         menuButton->setPosition(visibleSize - menuButton->getContentSize());
-        Menu* menu = Menu::create(menuButton, NULL);
-        menu->setPosition(Vec2::ZERO);
-        addChild(menu, 1);
+        m_buttons[BTN_MENU] = Menu::create(menuButton, NULL);
+        m_buttons[BTN_MENU]->setPosition(Vec2::ZERO);
+        addChild(m_buttons[BTN_MENU], 1);
     }
 
     {
@@ -80,9 +80,9 @@ bool GameplayScene::init(int enemies)
         text->setColor(Color3B(255, 255, 255));
         MenuItem* menuButton = MenuItemLabel::create(text, CC_CALLBACK_1(GameplayScene::showAtlases, this));
         menuButton->setPosition(Vec2(menuButton->getContentSize().width / 2 + 40, visibleSize.height - menuButton->getContentSize().height));
-        Menu* menu = Menu::create(menuButton, NULL);
-        menu->setPosition(Vec2::ZERO);
-        addChild(menu, 1);
+        m_buttons[BTN_ATLASES] = Menu::create(menuButton, NULL);
+        m_buttons[BTN_ATLASES]->setPosition(Vec2::ZERO);
+        addChild(m_buttons[BTN_ATLASES], 1);
     }
 
     {
@@ -104,9 +104,9 @@ bool GameplayScene::init(int enemies)
 
         leftButton->setScaleX(-1);
         rightButton->setPosition(Size(leftButton->getContentSize().width + 40, 0));
-        Menu* menu = Menu::create(leftButton, rightButton, NULL);
-        menu->setPosition(leftButton->getContentSize() + Size(0, -10));
-        addChild(menu, 1);
+        m_buttons[BTN_MOVE] = Menu::create(leftButton, rightButton, NULL);
+        m_buttons[BTN_MOVE]->setPosition(leftButton->getContentSize() + Size(0, -10));
+        addChild(m_buttons[BTN_MOVE], 1);
     }
 
     {
@@ -123,9 +123,14 @@ bool GameplayScene::init(int enemies)
         toggleGunButton->setPosition(Size(-toggleGunButton->getContentSize().width - fireButton->getContentSize().width - 40, fireButton->getContentSize().height));
 
         fireButton->setPosition(Size(-fireButton->getContentSize().width, fireButton->getContentSize().height));
-        Menu* menu = Menu::create(fireButton, toggleGunButton, NULL);
-        menu->setPosition(Size(visibleSize.width, -10));
-        addChild(menu, 1);
+        
+        m_buttons[BTN_FIRE] = Menu::create(fireButton, NULL);
+        m_buttons[BTN_FIRE]->setPosition(Size(visibleSize.width, -10));
+        addChild(m_buttons[BTN_FIRE], 1);
+
+        m_buttons[BTN_GUN] = Menu::create(toggleGunButton, NULL);
+        m_buttons[BTN_GUN]->setPosition(Size(visibleSize.width, -10));
+        addChild(m_buttons[BTN_GUN], 1);
     }
 
     {
@@ -316,5 +321,46 @@ void GameplayScene::toggleGunButtonCallback(cocos2d::Ref* pSender)
     else if (m_gunId == 1)
     {
         m_player->setGun(Gun::create("gun_2.plist"));
+    }
+}
+
+void GameplayScene::disableHud()
+{
+    for (int i = 0; i < BTN_COUNT; i++)
+    {
+        m_buttons[i]->setEnabled(false);
+    }
+    
+    Nodes_t nodes = m_level->getChildren();
+    for (Nodes_t::iterator it = nodes.begin(); it != nodes.end(); ++it)
+    {
+        if ((*it)->getTag() == TAG_ENEMY)
+        {
+            Enemy *e = reinterpret_cast<Enemy*>(*it);
+            e->setMoving(false);
+        }
+    }
+}
+
+void GameplayScene::enableWeaponSwitch()
+{
+    m_buttons[BTN_GUN]->setEnabled(true);
+}
+
+void GameplayScene::enableAll()
+{
+    for (int i = 0; i < BTN_COUNT; i++)
+    {
+        m_buttons[i]->setEnabled(true);
+    }
+
+    Nodes_t nodes = m_level->getChildren();
+    for (Nodes_t::iterator it = nodes.begin(); it != nodes.end(); ++it)
+    {
+        if ((*it)->getTag() == TAG_ENEMY)
+        {
+            Enemy *e = reinterpret_cast<Enemy*>(*it);
+            e->setMoving(true);
+        }
     }
 }

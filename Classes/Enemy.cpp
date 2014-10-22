@@ -7,7 +7,10 @@
 USING_NS_CC;
 USING_NS_GAF;
 
+const float Enemy::k_speed = 400;
+
 Enemy::Enemy()
+: m_speed(k_speed)
 {
 }
 
@@ -151,6 +154,18 @@ void Enemy::walkRight()
 
     m_model->playSequence("walk_right", true);
     m_state = EWalkRight;
+}
+
+void Enemy::setMoving(bool moving)
+{
+    if (moving)
+    {
+        m_speed = 400;
+    }
+    else
+    {
+        m_speed = 0;
+    }
 }
 
 void Enemy::onFinishSequence(GAFAnimatedObject * object, const std::string& sequenceName)

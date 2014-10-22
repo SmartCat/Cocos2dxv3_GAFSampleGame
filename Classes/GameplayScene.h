@@ -13,6 +13,26 @@ class SpeechBubble;
 
 class GameplayScene : public cocos2d::Scene
 {
+    //constants
+    enum CHILD_TAGS
+    {
+        TAG_LEVEL = 1,
+        TAG_PLAYER,
+        TAG_ENEMY,
+        TAG_PROJECTILE
+    };
+
+    enum BUTTONS
+    {
+        BTN_MENU = 0,
+        BTN_ATLASES,
+        BTN_MOVE,
+        BTN_GUN,
+        BTN_FIRE,
+
+        BTN_COUNT
+    };
+
 public:
     GameplayScene();
     ~GameplayScene();
@@ -29,6 +49,10 @@ public:
     void leftButtonCallback(cocos2d::Ref* pSender, bool pressed);
     void rightButtonCallback(cocos2d::Ref* pSender, bool pressed);
     void toggleGunButtonCallback(cocos2d::Ref* pSender);
+
+    void disableHud();
+    void enableWeaponSwitch();
+    void enableAll();
 
     void spawnEnemy();
     void addProjectile(Projectile* p);
@@ -47,12 +71,6 @@ private:
 
     SpeechBubble* m_speechBubble;
 
-    //constants
-    enum CHILD_TAGS
-    {
-        TAG_LEVEL = 1,
-        TAG_PLAYER,
-        TAG_ENEMY,
-        TAG_PROJECTILE
-    };
+    cocos2d::Menu* m_buttons[BTN_COUNT];
+
 };
