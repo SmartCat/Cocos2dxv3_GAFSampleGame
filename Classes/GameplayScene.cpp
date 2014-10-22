@@ -26,7 +26,6 @@ GameplayScene::~GameplayScene()
 {
     removeAllChildrenWithCleanup(true);
     _eventDispatcher->removeCustomEventListeners("enemy_killed");
-    m_speechBubble->release();
 }
 
 GameplayScene* GameplayScene::create(int enemies)
@@ -114,12 +113,19 @@ bool GameplayScene::init(int enemies)
             Sprite::create("fire_selected.png"),
             CC_CALLBACK_1(GameplayScene::fireButtonCallback, this));
 
-        toggleGunButton->setPosition(Size(- toggleGunButton->getContentSize().width - fireButton->getContentSize().width - 40, fireButton->getContentSize().height));
+        toggleGunButton->setPosition(Size(-toggleGunButton->getContentSize().width - fireButton->getContentSize().width - 40, fireButton->getContentSize().height));
 
         fireButton->setPosition(Size(-fireButton->getContentSize().width, fireButton->getContentSize().height));
         Menu* menu = Menu::create(fireButton, toggleGunButton, NULL);
         menu->setPosition(Size(visibleSize.width, -10));
         addChild(menu, 1);
+    }
+
+    {
+        m_speechBubble = SpeechBubble::create();
+        m_speechBubble->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - m_speechBubble->getContentSize().height));
+        addChild(m_speechBubble, 1);
+        m_speechBubble->setVisible(false);
     }
 
     {
@@ -138,9 +144,6 @@ bool GameplayScene::init(int enemies)
         m_player->setPosition(levelPosition);
         m_player->setScale(levelScale.x, levelScale.y);
         addChild(m_player, 1, TAG_PLAYER);
-
-        m_speechBubble = SpeechBubble::create();
-        m_speechBubble->retain();
 
         m_level->setScale(levelScale.x, levelScale.y);
         m_level->setPosition(levelPosition);
@@ -287,43 +290,8 @@ void GameplayScene::addProjectile(Projectile* p)
     addChild(p, 1, TAG_PROJECTILE);
 }
 
-void GameplayScene::nextBubbleState()
-{
-    static int curState = 0;
-
-    m_speechBubble->detachFromParent();
-
-    switch (curState) // TODO: enum
-    {
-    case 0:
-        m_speechBubble->setFrame(curState);
-        m_speechBubble->attachToParent(m_player);
-        break;
-
-    case 1:
-        {
-            m_speechBubble->setFrame( curState );
-            auto enemy = m_level->getChildByTag( TAG_ENEMY );
-            m_speechBubble->attachToParent( enemy );
-        }
-        break;
-
-    case 2:
-        m_speechBubble->setFrame(curState);
-        m_speechBubble->attachToParent(m_player);
-        break;
-
-    default:
-        break;
-    }
-
-    curState++;
-}
-
 void GameplayScene::toggleGunButtonCallback(cocos2d::Ref* pSender)
 {
-    nextBubbleState();
-
     int GUNS = 2;
 
     m_gunId += 1;
