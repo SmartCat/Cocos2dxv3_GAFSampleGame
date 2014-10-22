@@ -9,6 +9,7 @@ namespace gaf
 
 class Player;
 class Projectile;
+class SpeechBubble;
 
 class GameplayScene : public cocos2d::Scene
 {
@@ -36,11 +37,15 @@ private:
     void checkCollisionsSimple();
     float checkForProjectilesDamage(const float enemyX, const float epsDistance);
 
+    void nextBubbleState();
+
     Player* m_player;
     int m_gunId = 0;
     cocos2d::Node* m_level;
     gaf::GAFAsset* m_enemyAsset;
     int m_robots;
+
+    SpeechBubble* m_speechBubble;
 
     //constants
     enum CHILD_TAGS
