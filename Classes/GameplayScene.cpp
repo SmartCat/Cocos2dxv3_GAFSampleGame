@@ -68,11 +68,10 @@ bool GameplayScene::init(int enemies)
     }
 
     {
-        Label* text = Label::create("Atlases", "Courier.ttf", 24);
-        text->setColor(Color3B(160, 255, 160));
+        Label* text = Label::create("Atlases", "Courier.ttf", 35);
+        text->setColor(Color3B(255, 255, 255));
         MenuItem* menuButton = MenuItemLabel::create(text, CC_CALLBACK_1(GameplayScene::showAtlases, this));
-        cocos2d::Vec2 pos = visibleSize - menuButton->getContentSize();
-        menuButton->setPosition(Vec2(menuButton->getContentSize().width, visibleSize.height - menuButton->getContentSize().height));
+        menuButton->setPosition(Vec2(menuButton->getContentSize().width / 2 + 40, visibleSize.height - menuButton->getContentSize().height));
         Menu* menu = Menu::create(menuButton, NULL);
         menu->setPosition(Vec2::ZERO);
         addChild(menu, 1);
